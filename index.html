@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Social</title>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        header {
+            background-color: #1877f2;
+            color: white;
+            padding: 20px;
+            font-size: 26px;
+        }
+
+        .post {
+            background: white;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        button {
+            background: #1877f2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="profile">
+    <h2>👤 My Profile 💙</h2>
+<img id="profilePic" src="profile.jpg" alt="My Profile Picture" width="100" height="100" style="border-radius: 50%;">
+<button onclick="document.getElementById('photoInput').click()">📸 Change Photo</button>
+<p id="username">👤 Username: MyUser</p>
+<input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="document.getElementById('profilePic').src = URL.createObjectURL(this.files[0])">
+<p id="bio">💙 Bio: Welcome to my profile!</p>
+<button onclick="editProfile()">✏️ Edit Profile</button>
+</div>   
+<header>My Social 💙</header>
+
+    <div class="post">
+        <h2>Welcome to My Social!</h2>
+        <p>Connect with friends and share your world.</p>
+        <button onclick="alert('Hello!')">
+            Like 👍
+        </button>
+    </div>
+
+<div class="post">
+  <h2>Create a Post ✍️</h2>
+  <textarea id="postText"
+    placeholder="What's on your mind?"
+    rows="4"
+    style="width: 100%; box-sizing: border-box;">
+  </textarea>
+
+  <button onclick="publishPost()">Post 💙</button>
+</div>
+
+<div id="feed"></div>
+
+<script>
+function publishPost() {
+  const text = document.getElementById("postText").value;
+
+  if (text.trim() === "") {
+    alert("Write something first!");
+    return;
+  }
+
+  const post = document.createElement("div");
+  post.className = "post";
+
+  const message = document.createElement("p");
+  message.textContent = text;
+  post.appendChild(message);
+
+  const likeButton = document.createElement("button");
+likeButton.textContent = "❤️ Like 0";
+
+let likes = 0;
+
+likeButton.onclick = function() {
+    likes++;
+    likeButton.textContent = "❤️ Like " + likes;
+};
+
+post.appendChild(likeButton);
+const commentInput = document.createElement("input");
+commentInput.placeholder = "Write a comment...";
+post.appendChild(commentInput);
+
+const commentButton = document.createElement("button");
+commentButton.textContent = "💬 Comment";
+post.appendChild(commentButton);
+commentButton.onclick = function() {
+    const comment = commentInput.value.trim();
+
+    if (comment === "") {
+        alert("Write a comment first!");
+        return;
+    }
+const commentText = document.createElement("p");
+commentText.textContent = "💬 " + comment;
+post.appendChild(commentText);
+commentInput.value = "";
+};
+const shareButton = document.createElement("button");
+
+shareButton.textContent = "🔗 Share";
+
+shareButton.onclick = function() {
+    navigator.clipboard.writeText(text)
+        .then(() => alert("Post copied! 💙"))
+        .catch(() => alert("Could not copy post."));
+};
+
+post.appendChild(shareButton);
+
+
+  document.getElementById("feed").prepend(post);
+  document.getElementById("postText").value = "";
+}
+
+function editProfile() {
+    let newName = prompt("Enter your new username:");
+
+    if (newName && newName.trim() !== "") {
+        document.getElementById("username").textContent =
+            "👤 Username: " + newName;
+            localStorage.setItem("username", newName);
+    }
+
+    let newBio = prompt("Enter your new bio:");
+
+if (newBio !== null) {
+    document.getElementById("bio").textContent =
+        "💙 Bio: " + newBio;
+localStorage.setItem("bio", newBio);
+    }
+}
+
+window.onload = function() {
+    const savedName = localStorage.getItem("username");
+    const savedBio = localStorage.getItem("bio");
+
+    if (savedName) {
+        document.getElementById("username").textContent = "👤 Username: " + savedName;
+    }
+
+    if (savedBio !== null) {
+        document.getElementById("bio").textContent = "💙 Bio: " + savedBio;
+    }
+
+const savedPhoto = localStorage.getItem("profilePhoto");
+if (savedPhoto) {
+    document.getElementById("profilePic").src = savedPhoto;
+}
+};
+document.getElementById("photoInput").addEventListener("change", function() {
+const file = this.files[0];
+  if (file) {  
+const reader = new FileReader();
+reader.onload = function() {
+   document.getElementById("profilePic").src = reader.result;
+localStorage.setItem("profilePhoto", reader.result); 
+
+
+    };
+    reader.readAsDataURL(file);
+    
+    
+  }
+});
+</script>
+
+
+</body>
+</html>

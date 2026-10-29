@@ -1,187 +1,263 @@
-
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>My Social</title>
-    <style>
-        body {
-            background-color: #f0f2f5;
-            font-family: Arial, sans-serif;
-            margin: 0;
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1877f2">
+<title>My Social 💙 — Photos, Places, Sharing & Password Reset</title>
+<style>
+:root{--blue:#1877f2;--blue2:#0f5ec5;--bg:#f0f2f5;--ink:#192332;--muted:#647184;--line:#e2e7ed;--good:#127b53;--red:#b42318;--shadow:0 2px 12px #12294c0e}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.5}button,input,textarea{font:inherit}button{cursor:pointer;border:0;background:var(--blue);color:#fff;font-weight:700;border-radius:9px;padding:10px 15px;transition:background .15s}button:hover:not(:disabled){background:var(--blue2)}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #9accff;outline-offset:2px}button:disabled{opacity:.52;cursor:not-allowed}button.secondary{background:#e8f2ff;color:#145db8}button.secondary:hover:not(:disabled){background:#d9eaff}button.ghost{background:#edf0f4;color:#303b4c}button.ghost:hover:not(:disabled){background:#dfe5ec}button.danger{background:#ffebea;color:#9f241f}button.danger:hover:not(:disabled){background:#ffdfdc}button.small{padding:7px 10px;font-size:13px}input,textarea{width:100%;min-width:0;border:1px solid #d4dce6;border-radius:9px;padding:11px 12px;background:#fafcff;color:var(--ink)}textarea{resize:vertical}h1,h2,h3,p{margin-top:0}h2{font-size:20px;margin-bottom:12px}h3{font-size:16px;margin-bottom:6px}p{margin-bottom:10px}.muted{color:var(--muted)}.small{font-size:13px}.hide{display:none!important}.topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;box-shadow:0 1px 8px #12294c0a}.top-inner{max-width:1180px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 18px}.brand{font-size:24px;color:var(--blue);font-weight:900;letter-spacing:-.7px}.brand span{font-size:18px}.nav{display:flex;gap:8px;flex-wrap:wrap}.nav button{background:#f0f5fb;color:#295781}.nav button:hover{background:#e3eeff}.wrap{max-width:1180px;margin:22px auto;padding:0 16px}.intro{background:linear-gradient(120deg,#1877f2,#48a9ff);color:white;padding:22px;border-radius:16px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;justify-content:space-between;gap:14px;align-items:center}.intro h1{margin:0;font-size:24px}.intro p{margin:3px 0 0;color:#e9f4ff}.pill{border-radius:99px;padding:6px 11px;font-size:13px;font-weight:bold;background:#e8f2ff;color:#145bb2}.intro .pill{background:#ffffff28;color:white}.layout{display:grid;grid-template-columns:270px minmax(0,1fr) 280px;gap:16px;align-items:start}.card{background:white;border-radius:14px;padding:19px;box-shadow:var(--shadow);margin-bottom:16px;min-width:0}.card .head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.card .head h2{margin:0}.cover{height:82px;border-radius:12px;background:linear-gradient(125deg,#116be5,#55a7ff,#cce9ff);margin-bottom:-38px}.profile-avatar{position:relative;width:86px;height:86px;border:4px solid white;border-radius:50%;background:#dbeaff;display:grid;place-items:center;font-size:30px;font-weight:800;color:#1556a5;overflow:hidden;flex-shrink:0}.profile-avatar img{width:100%;height:100%;object-fit:cover}.profile-cover-avatar{margin-left:14px;margin-bottom:8px}.avatar{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:#dceaff;color:#1360b7;font-weight:800;flex-shrink:0}.row{display:flex;align-items:center;gap:11px}.col{display:flex;flex-direction:column;gap:8px}.grow{flex:1;min-width:0}.stack{display:flex;gap:8px;flex-wrap:wrap}.stack > button{flex:0 0 auto}.list-row{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding:12px 0;min-width:0}.list-row:first-of-type{border-top:0}.list-row strong{display:block;overflow-wrap:anywhere}.list-row .actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.label{display:block;font-size:13px;font-weight:bold;margin:9px 0 5px}.note{color:var(--muted);font-size:13px;margin:10px 0}.status{font-size:14px;min-height:19px;margin:9px 0;color:var(--muted)}.status.error{color:var(--red);font-weight:bold}.status.good{color:var(--good)}.msg-panel{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#f9fbff}.msg-head{padding:12px 14px;background:#eff5ff;border-bottom:1px solid var(--line);font-weight:700}.msg-history{height:330px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}.bubble{max-width:86%;align-self:flex-start;background:white;border:1px solid var(--line);border-radius:13px 13px 13px 4px;padding:9px 12px;overflow-wrap:anywhere}.bubble.mine{align-self:flex-end;background:#dcecff;border-color:#b4d5ff;border-radius:13px 13px 4px 13px}.bubble .who{color:#185ba8;font-weight:bold;font-size:12px;margin-bottom:2px}.bubble .when{font-size:11px;color:var(--muted);margin-top:3px}.compose{padding:11px;background:white;border-top:1px solid var(--line);display:flex;gap:8px}.compose input{flex:1}.post{border-top:1px solid var(--line);padding:16px 0}.post:first-child{border-top:0;padding-top:4px}.post .body{white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0}.post-actions{display:flex;gap:7px;flex-wrap:wrap}.comments{background:#f6f8fb;border-radius:10px;padding:10px;margin:10px 0}.comment{border-top:1px solid var(--line);padding:7px 0;font-size:13px}.comment:first-child{border:0}.comment-form{display:flex;gap:7px;margin-top:8px}.auth-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.auth-grid .wide{grid-column:1/-1}.auth-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.empty{border:1px dashed #cbd7e6;border-radius:11px;padding:18px;color:var(--muted);font-size:14px;text-align:center}.section-title{font-size:14px;font-weight:800;color:#54708c;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 7px}.divider{border:0;border-top:1px solid var(--line);margin:15px 0}.user-chip{font-size:13px;color:#36536f;overflow-wrap:anywhere}.banner{border:1px solid #d9e8fb;background:#edf5ff;border-radius:9px;padding:10px;font-size:13px;margin:8px 0}.loading{color:#647184}.count{font-size:12px;color:var(--muted)}
+@media(max-width:1000px){.layout{grid-template-columns:240px minmax(0,1fr)}.right{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:14px}.right .card{margin:0}}
+@media(max-width:650px){.layout{grid-template-columns:1fr}.right{display:block;grid-column:auto}.intro{padding:17px}.intro h1{font-size:21px}.top-inner{align-items:flex-start;flex-wrap:wrap}.nav{width:100%}.nav button{flex:1;font-size:13px;padding:8px}.auth-grid{grid-template-columns:1fr}.msg-history{height:310px}.list-row{align-items:flex-start}.list-row .actions{max-width:150px}}
 
-        header {
-            background-color: #1877f2;
-            color: white;
-            padding: 20px;
-            font-size: 26px;
-        }
-
-        .post {
-            background: white;
-            margin: 20px;
-            padding: 20px;
-            border-radius: 12px;
-        }
-
-        button {
-            background: #1877f2;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-    </style>
+/* My Social Plus: lightweight emoji picker, manual places, and demo-sized photo posts */
+.composer-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+.composer-tools button{font-size:13px}
+.composer-tools .tool-label{margin-left:auto;font-size:12px;color:var(--muted)}
+.post-location{margin:8px 0 1px;color:#3a6596;font-size:13px;overflow-wrap:anywhere}
+.post-photo{display:block;width:100%;max-height:490px;object-fit:contain;border-radius:12px;border:1px solid var(--line);background:#f1f5fa;margin:10px 0}
+.photo-preview{background:#f4f8fc;border:1px dashed #afc7e3;border-radius:12px;padding:10px;margin-top:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.photo-preview img{width:140px;height:105px;object-fit:contain;border-radius:8px;background:#eaf0fa}
+.place-box{margin-top:10px}
+.place-box input{max-width:370px}
+.emoji-holder{position:relative;display:inline-flex;align-items:center}
+.emoji-picker{position:absolute;top:calc(100% + 5px);left:0;z-index:8;width:272px;max-width:75vw;display:grid;grid-template-columns:repeat(7,1fr);gap:2px;background:#fff;box-shadow:0 12px 30px #173a6935;border:1px solid var(--line);border-radius:12px;padding:7px}
+.emoji-picker button{padding:6px 2px;border-radius:6px;background:white;color:#1d2d41;font-size:21px;font-weight:400;line-height:1.2}
+.emoji-picker button:hover{background:#eaf3ff}
+.emoji-mini{padding:7px 9px;white-space:nowrap}
+.share-panel{background:#f5f8ff;border:1px solid #dbe6f3;border-radius:10px;padding:12px;margin-top:10px}
+.share-panel .stack{margin:6px 0 0}
+.photo-note{color:#6f7c8c;font-size:12px;margin:6px 0 0}
+@media(max-width:650px){.compose{flex-wrap:wrap}.compose input{flex:1 1 65%}.emoji-picker{left:auto;right:0}.composer-tools .tool-label{width:100%;margin-left:0}}
+</style>
 </head>
 <body>
-<div class="profile">
-    <h2>👤 My Profile 💙</h2>
-<img id="profilePic" src="profile.jpg" alt="My Profile Picture" width="100" height="100" style="border-radius: 50%;">
-<button onclick="document.getElementById('photoInput').click()">📸 Change Photo</button>
-<p id="username">👤 Username: MyUser</p>
-<input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="document.getElementById('profilePic').src = URL.createObjectURL(this.files[0])">
-<p id="bio">💙 Bio: Welcome to my profile!</p>
-<button onclick="editProfile()">✏️ Edit Profile</button>
-</div>   
-<header>My Social 👥</header>
-
-    <div class="post">
-        <h2>Welcome to My Social!</h2>
-        <p>Connect with friends and share your world.</p>
-        <button onclick="alert('Hello!')">
-            Like 👍
-        </button>
-    </div>
-
-<div class="post">
-  <h2>Create a Post ✍️</h2>
-  <textarea id="postText"
-    placeholder="What's on your mind?"
-    rows="4"
-    style="width: 100%; box-sizing: border-box;">
-  </textarea>
-
-  <button onclick="publishPost()">Post 💙</button>
+<header class="topbar"><div class="top-inner"><div class="brand">My Social <span>💙</span></div><nav class="nav"><button data-go="feed">🏠 Home</button><button data-go="people">👥 People</button><button data-go="friends">🤝 Friends</button><button data-go="chat">💬 Chat</button></nav></div></header>
+<div class="wrap">
+  <div class="intro"><div><h1>Connect, share, and chat 💙</h1><p>Your community, your friends, your conversations.</p></div><span class="pill" id="headerStatus">Connecting…</span></div>
+  <section class="card" id="authCard"><h2>Welcome to My Social</h2><p class="muted small">Sign in with your existing My Social account, or create a new account. Your original Firebase project is preserved.</p>
+    <div class="auth-grid"><div><label class="label" for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div><label class="label" for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"></div><div class="wide"><label class="label" for="signupName">Display name (for new accounts)</label><input id="signupName" maxlength="40" placeholder="How people will find you"></div></div>
+    <div class="auth-actions"><button id="loginBtn">Log In</button><button class="secondary" id="signupBtn">Create Account</button><button class="ghost" id="logoutBtn" disabled>Log Out</button><button class="secondary" type="button" id="forgotPasswordBtn">🔑 Forgot Password?</button></div><div id="authStatus" class="status" role="status" aria-live="polite"></div>
+  </section>
+  <div class="layout hide" id="appLayout">
+    <aside>
+      <section class="card" id="profile"><div class="cover"></div><div class="profile-avatar profile-cover-avatar" id="myAvatar"><span>💙</span></div><h2 id="profileName">My Profile</h2><p class="user-chip" id="profileEmail"></p><p id="profileBio" class="muted small">Welcome to My Social!</p><div class="stack"><button class="secondary small" id="editProfileBtn">✏️ Edit profile</button><button class="ghost small" id="photoBtn">📷 Photo</button></div><input class="hide" type="file" accept="image/*" id="photoFile"><p class="note">Photo changes are stored only in this browser, not shared with other users.</p></section>
+      <section class="card" id="friends"><div class="head"><h2>🤝 Friends</h2><span class="count" id="friendCount"></span></div><div id="friendsList" class="empty">Sign in to see friends.</div><div class="section-title">Requests for you</div><div id="incomingList" class="muted small">No requests.</div><div class="section-title">Sent requests</div><div id="outgoingList" class="muted small">No pending requests.</div><p id="friendStatus" class="status" aria-live="polite"></p></section>
+    </aside>
+    <main>
+      <section class="card" id="feed"><div class="head"><h2>📰 News Feed</h2></div>
+<label for="postInput" class="label">What's on your mind?</label>
+<textarea id="postInput" rows="3" maxlength="1500" placeholder="Share something with the community…"></textarea>
+<div class="composer-tools">
+  <span class="emoji-holder"><button class="secondary" type="button" id="postEmojiBtn">😊 Emoji</button><span class="emoji-picker hide" id="postEmojiPicker" aria-label="Choose an emoji"></span></span>
+  <button type="button" class="secondary" id="addPhotoBtn">📷 Photo</button>
+  <button type="button" class="secondary" id="addLocationBtn">📍 Place</button>
+  <span class="tool-label">Choose a photo or write a message</span>
 </div>
+<input class="hide" type="file" id="postPhotoFile" accept="image/jpeg,image/png,image/webp,image/gif">
+<div class="photo-preview hide" id="photoPreview"><img id="photoPreviewImage" alt="Photo ready to post"><div class="col"><strong>Photo ready to share</strong><button type="button" class="ghost small" id="removePhotoBtn">Remove photo</button></div></div>
+<div class="place-box hide" id="placeBox"><label class="label" for="postPlace">📍 Add a place (optional)</label><input type="text" id="postPlace" maxlength="80" placeholder="e.g., Limerick, Ireland"><p class="photo-note">Only type a place you want other signed-in members to see. We don't collect GPS.</p></div>
+<div class="composer-tools"><button type="button" id="postBtn">Publish Post 💙</button></div>
+<p class="photo-note">Photo posts are automatically reduced in size for this demo. One photo per post; no paid storage setup needed.</p>
+<p class="status" id="postStatus" aria-live="polite"></p><div id="postsList" class="loading">Loading community posts…</div></section>
+      <section class="card" id="chat"><div class="head"><h2>💬 Private Messages</h2></div><p class="muted small">Select a friend to chat. New people must accept a friend request before you can message each other.</p><div class="msg-panel"><div class="msg-head" id="chatName">Choose a friend</div><div id="messageList" class="msg-history"><div class="empty">Select a friend from the Friends section.</div></div><form id="messageForm" class="compose"><input id="messageInput" maxlength="2000" placeholder="Type a message…" disabled required autocomplete="off"><span class="emoji-holder"><button id="chatEmojiBtn" class="secondary emoji-mini" type="button" disabled aria-label="Add emoji to message">😊</button><span class="emoji-picker hide" id="chatEmojiPicker" aria-label="Choose a message emoji"></span></span><button id="sendBtn" type="submit" disabled>Send</button></form></div><p class="status" id="messageStatus" aria-live="polite"></p></section>
+    </main>
+    <aside class="right"><section class="card" id="people"><div class="head"><h2>👥 Find People</h2></div><label class="label" for="peopleSearch">Search by display name</label><input id="peopleSearch" type="search" placeholder="Search people…" maxlength="40"><p class="note">Searches public display names, not email addresses.</p><div id="peopleList" class="loading">Loading people…</div><p class="status" id="peopleStatus" aria-live="polite"></p></section>
+      <section class="card"><h2>🔒 About privacy</h2><p class="small muted">Only signed-in members can view the directory and feed. Private messages are restricted to their two participants after a friend request is accepted.</p><p class="small muted">Your account password is handled by Firebase Authentication. Never share it.</p></section>
+    </aside>
+  </div>
+</div>
+<script type="module">
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js';
+import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail,signOut,updateProfile} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js';
+import {getFirestore,doc,getDoc,setDoc,addDoc,deleteDoc,collection,query,where,orderBy,startAt,endAt,limit,getDocs,onSnapshot,serverTimestamp} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
 
-<div id="feed"></div>
+// This is the ORIGINAL My Social Firebase project. Keep this configuration.
+const firebaseConfig={apiKey:'AIzaSyDoXBu86nx1hQBYEzapMZdJm3XXckGPEs8',authDomain:'my-social-11308.firebaseapp.com',projectId:'my-social-11308',storageBucket:'my-social-11308.firebasestorage.app',messagingSenderId:'581747567782',appId:'1:581747567782:web:325dcbc4d3c791bfd01867'};
+const DANU='LZGLyVFglcV24V9Qi7q28lRnkR33',ALEX='s1G5WeRtaZboEv6Xdfi5ZtsBIpw1';
+const LEGACY_CHAT=`${DANU}_${ALEX}`;
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id);
+const state={uid:null,user:null,me:null,profiles:new Map(),friendships:new Map(),activeChat:null,activePeer:null,unsubs:[],chatUnsub:null,postUnsub:null,peopleTimer:null,authGeneration:0,posting:false,sending:false};
+let pendingSignupName='';
+const str=s=>String(s??'');
+const nameFor=uid=>state.profiles.get(uid)?.displayName || (uid===DANU?'Danu':uid===ALEX?'Alex':'Member');
+const pairKey=(a,b)=>[a,b].sort().join('_');
+const chatKey=(a,b)=>([a,b].includes(DANU)&&[a,b].includes(ALEX))?LEGACY_CHAT:pairKey(a,b);
+const isLegacyFriend=uid=>((state.uid===DANU&&uid===ALEX)||(state.uid===ALEX&&uid===DANU));
+function status(id,message,type=''){const el=$(id);el.textContent=message;el.className='status '+type;}
+function displayError(e){console.error(e);const code=e?.code||'';if(code==='permission-denied')return 'Firebase denied permission. Publish the firestore.rules file supplied with this version.';if(code==='auth/email-already-in-use')return 'This email is already registered. Select Log In.';if(code==='auth/invalid-credential'||code==='auth/wrong-password')return 'Email or password not recognized. Try again or click Forgot Password?';if(code==='auth/unauthorized-domain')return 'This website address is not approved in Firebase Authentication → Settings → Authorized domains.';if(code==='auth/weak-password')return 'Choose a password with at least 6 characters.';if(code==='auth/invalid-email')return 'Enter a valid email address.';return e?.message || 'Something went wrong. Try again.';}
+function make(tag,className='',text=''){const el=document.createElement(tag);if(className)el.className=className;if(text)el.textContent=str(text);return el;}
+function btn(label,fn,kind='secondary'){const b=make('button',kind+' small',label);b.type='button';b.addEventListener('click',fn);return b;}
+function initials(name){return str(name).trim().split(/\s+/).slice(0,2).map(x=>x[0]?.toUpperCase()||'').join('')||'💙';}
+function face(name){return make('span','avatar',initials(name));}
+function tsValue(t){if(t?.toMillis)return t.toMillis();if(t?.seconds)return t.seconds*1000;return 0;}
+function timeLabel(t){const n=tsValue(t);return n?new Date(n).toLocaleString():'';}
+function unsubscribeAll(){state.unsubs.forEach(f=>{try{f();}catch{}});state.unsubs=[];if(state.chatUnsub){state.chatUnsub();state.chatUnsub=null;}if(state.postUnsub){state.postUnsub();state.postUnsub=null;}clearTimeout(state.peopleTimer);state.activeChat=null;state.activePeer=null;state.friendships.clear();state.profiles.clear();}
+function signedInOnly(){return !!auth.currentUser&&!!state.uid;}
 
-<script>
-function publishPost() {
-  const text = document.getElementById("postText").value;
-
-  if (text.trim() === "") {
-    alert("Write something first!");
+// Login and signup use the user's existing Firebase Authentication project.
+async function authAction(mode){const email=$('authEmail').value.trim(),password=$('authPassword').value;const displayName=$('signupName').value.trim();status('authStatus','');if(!email||!password){status('authStatus','Please enter an email address and password.','error');return;}if(mode==='signup'&&(displayName.length<2||displayName.length>40)){status('authStatus','Choose a display name between 2 and 40 characters.','error');return;}const target=$(mode==='signup'?'signupBtn':'loginBtn');target.disabled=true;try{if(mode==='signup'){pendingSignupName=displayName;const cred=await createUserWithEmailAndPassword(auth,email,password);await updateProfile(cred.user,{displayName});await ensureProfile(cred.user);await setDoc(doc(db,'users',cred.user.uid),{displayName,searchName:displayName.toLowerCase(),updatedAt:serverTimestamp()},{merge:true});if(state.uid===cred.user.uid){state.me={...state.me,displayName};state.profiles.set(cred.user.uid,state.me);showProfile();}}else await signInWithEmailAndPassword(auth,email,password);$('authPassword').value='';status('authStatus','You are signed in!','good');}catch(e){status('authStatus',displayError(e),'error');}finally{pendingSignupName='';target.disabled=false;}}
+// Password resets use Firebase Authentication, not Firestore security rules.
+$('forgotPasswordBtn').addEventListener('click', async () => {
+  const email = $('authEmail').value.trim() || auth.currentUser?.email || '';
+  if (!email) {
+    status('authStatus', 'Enter the email address for your My Social account, then click Forgot Password?.', 'error');
+    $('authEmail').focus();
     return;
   }
-
-  const post = document.createElement("div");
-  post.className = "post";
-
-  const message = document.createElement("p");
-  message.textContent = text;
-  post.appendChild(message);
-
-  const likeButton = document.createElement("button");
-likeButton.textContent = "❤️ Like 0";
-
-let likes = 0;
-
-likeButton.onclick = function() {
-    likes++;
-    likeButton.textContent = "❤️ Like " + likes;
-};
-
-post.appendChild(likeButton);
-const commentInput = document.createElement("input");
-commentInput.placeholder = "Write a comment...";
-post.appendChild(commentInput);
-
-const commentButton = document.createElement("button");
-commentButton.textContent = "💬 Comment";
-post.appendChild(commentButton);
-commentButton.onclick = function() {
-    const comment = commentInput.value.trim();
-
-    if (comment === "") {
-        alert("Write a comment first!");
-        return;
+  const button = $('forgotPasswordBtn');
+  button.disabled = true;
+  status('authStatus', 'Requesting a password reset email…');
+  try {
+    await sendPasswordResetEmail(auth, email);
+    status('authStatus', 'If that email is registered, a reset link has been sent. Check Inbox and Spam/Junk. Follow the link to choose a new password.', 'good');
+  } catch (e) {
+    if (e?.code === 'auth/too-many-requests') {
+      status('authStatus', 'Too many attempts. Wait a while before trying again.', 'error');
+    } else if (e?.code === 'auth/invalid-email') {
+      status('authStatus', 'Please enter a valid email address.', 'error');
+    } else {
+      status('authStatus', 'Could not request the reset email. ' + displayError(e), 'error');
     }
-const commentText = document.createElement("p");
-commentText.textContent = "💬 " + comment;
-post.appendChild(commentText);
-commentInput.value = "";
-};
-const shareButton = document.createElement("button");
-
-shareButton.textContent = "🔗 Share";
-
-shareButton.onclick = function() {
-    navigator.clipboard.writeText(text)
-        .then(() => alert("Post copied! 💙"))
-        .catch(() => alert("Could not copy post."));
-};
-
-post.appendChild(shareButton);
-
-
-  document.getElementById("feed").prepend(post);
-  document.getElementById("postText").value = "";
-}
-
-function editProfile() {
-    let newName = prompt("Enter your new username:");
-
-    if (newName && newName.trim() !== "") {
-        document.getElementById("username").textContent =
-            "👤 Username: " + newName;
-            localStorage.setItem("username", newName);
-    }
-
-    let newBio = prompt("Enter your new bio:");
-
-if (newBio !== null) {
-    document.getElementById("bio").textContent =
-        "💙 Bio: " + newBio;
-localStorage.setItem("bio", newBio);
-    }
-}
-
-window.onload = function() {
-    const savedName = localStorage.getItem("username");
-    const savedBio = localStorage.getItem("bio");
-
-    if (savedName) {
-        document.getElementById("username").textContent = "👤 Username: " + savedName;
-    }
-
-    if (savedBio !== null) {
-        document.getElementById("bio").textContent = "💙 Bio: " + savedBio;
-    }
-
-const savedPhoto = localStorage.getItem("profilePhoto");
-if (savedPhoto) {
-    document.getElementById("profilePic").src = savedPhoto;
-}
-};
-document.getElementById("photoInput").addEventListener("change", function() {
-const file = this.files[0];
-  if (file) {  
-const reader = new FileReader();
-reader.onload = function() {
-   document.getElementById("profilePic").src = reader.result;
-localStorage.setItem("profilePhoto", reader.result); 
-
-
-    };
-    reader.readAsDataURL(file);
-    
-    
+  } finally {
+    button.disabled = false;
   }
 });
+$('loginBtn').addEventListener('click',()=>authAction('login'));
+$('signupBtn').addEventListener('click',()=>authAction('signup'));
+$('logoutBtn').addEventListener('click',async()=>{try{await signOut(auth);status('authStatus','Logged out.','good');}catch(e){status('authStatus',displayError(e),'error');}});
+for(const b of document.querySelectorAll('[data-go]'))b.addEventListener('click',()=>{
+ if(b.dataset.go==='chat' && signedInOnly()){
+   if(state.activePeer){$('chat').scrollIntoView({behavior:'smooth',block:'start'});return;}
+   let last='';try{last=localStorage.getItem('mySocialLastChat_'+state.uid)||'';}catch{}
+   const possible=[...state.friendships.values()].filter(f=>f.status==='accepted').flatMap(f=>f.participants.filter(u=>u!==state.uid));
+   if(state.uid===DANU)possible.unshift(ALEX);if(state.uid===ALEX)possible.unshift(DANU);
+   const accessible=u=>isLegacyFriend(u)||friendshipFor(u)?.status==='accepted';
+   const peer=accessible(last)?last:possible.find(accessible);
+   if(peer){openChat(peer);return;}
+ }
+ $(b.dataset.go)?.scrollIntoView({behavior:'smooth',block:'start'});
+});
+
+async function ensureProfile(user){const ref=doc(db,'users',user.uid);const found=await getDoc(ref);if(!found.exists()){const oldName=user.uid===DANU?localStorage.getItem('username'):null;const fallback=user.uid===DANU?'Danu':user.uid===ALEX?'Alex':(user.email?.split('@')[0]||'Member');const displayName=(pendingSignupName||user.displayName||oldName||fallback).trim().slice(0,40);const bio=user.uid===DANU?(localStorage.getItem('bio')||'Welcome to my profile!'):'Welcome to My Social!';const data={displayName,searchName:displayName.toLowerCase(),bio:bio.slice(0,240),createdAt:serverTimestamp(),updatedAt:serverTimestamp()};await setDoc(ref,data);return data;}return found.data();}
+function showProfile(){const me=state.me||{};$('profileName').textContent=me.displayName||'My Profile';$('profileBio').textContent=me.bio||'Welcome to My Social!';$('profileEmail').textContent=state.user?.email||'';const box=$('myAvatar');box.replaceChildren();const photo=state.uid===DANU?localStorage.getItem('profilePhoto'):localStorage.getItem('mySocialPhoto_'+state.uid);if(photo){const img=make('img');img.src=photo;img.alt='Your photo';img.onerror=()=>{box.replaceChildren(make('span','',initials(me.displayName)));};box.append(img);}else if(state.uid===DANU){const img=make('img');img.src='./profile.JPG';img.alt='Your photo';img.onerror=()=>{img.src='./profile.jpg';img.onerror=()=>{box.replaceChildren(make('span','',initials(me.displayName)));};};box.append(img);}else box.append(make('span','',initials(me.displayName)));}
+$('editProfileBtn').addEventListener('click',async()=>{if(!signedInOnly())return;const old=state.me||{};const n=prompt('Your display name (2–40 characters):',old.displayName||'');if(n===null)return;const displayName=n.trim();if(displayName.length<2||displayName.length>40){alert('Please choose 2 to 40 characters.');return;}const b=prompt('Your bio (maximum 240 characters):',old.bio||'');if(b===null)return;if(b.length>240){alert('Bio is too long (max 240 characters).');return;}try{await setDoc(doc(db,'users',state.uid),{displayName,searchName:displayName.toLowerCase(),bio:b,updatedAt:serverTimestamp()},{merge:true});state.me={...state.me,displayName,bio:b};state.profiles.set(state.uid,state.me);showProfile();loadPeople();}catch(e){alert(displayError(e));}});
+$('photoBtn').addEventListener('click',()=>$('photoFile').click());
+$('photoFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f||!state.uid)return;if(f.size>450000){alert('Choose an image smaller than 450 KB. This browser-only photo is not shared with other users.');return;}const reader=new FileReader();reader.onload=()=>{try{localStorage.setItem(state.uid===DANU?'profilePhoto':'mySocialPhoto_'+state.uid,reader.result);showProfile();}catch{alert('Browser storage is full. Choose a smaller image.');}};reader.readAsDataURL(f);});
+
+// Directory. Search prefix on public display names, never expose login emails.
+async function loadPeople(){if(!signedInOnly())return;const uid=state.uid;const q=$('peopleSearch').value.trim().toLowerCase();let results;status('peopleStatus','');$('peopleList').textContent='Searching…';try{const base=collection(db,'users');const qry=q?query(base,orderBy('searchName'),startAt(q),endAt(q+'\uf8ff'),limit(30)):query(base,orderBy('searchName'),limit(30));results=await getDocs(qry);if(uid!==state.uid)return;const box=$('peopleList');box.replaceChildren();let count=0;for(const d of results.docs){if(d.id===uid)continue;const data=d.data();state.profiles.set(d.id,data);box.append(personRow(d.id,data));count++;}if(!count)box.append(make('div','empty',q?'No matching people found.':'No other profiles yet.'));if(results.size===30)status('peopleStatus','Showing up to 30 results. Type a name to narrow your search.');}catch(e){status('peopleStatus',displayError(e),'error');$('peopleList').textContent='Could not load people.';}}
+$('peopleSearch').addEventListener('input',()=>{clearTimeout(state.peopleTimer);state.peopleTimer=setTimeout(loadPeople,300);});
+async function fetchNames(ids){const list=[...new Set(ids)].filter(id=>id&&!state.profiles.has(id));await Promise.all(list.map(async id=>{try{const snap=await getDoc(doc(db,'users',id));if(snap.exists())state.profiles.set(id,snap.data());}catch(err){console.warn('Could not load profile:',err);}}));}
+function friendshipFor(uid){return state.friendships.get(pairKey(state.uid,uid));}
+function personRow(uid,data){const row=make('div','list-row');row.append(face(data.displayName));const middle=make('div','grow');middle.append(make('strong','',data.displayName||'Member'),make('div','small muted',(data.bio||'').slice(0,65)));row.append(middle);const acts=make('div','actions');const f=friendshipFor(uid);if(isLegacyFriend(uid)||f?.status==='accepted'){acts.append(btn('Message',()=>openChat(uid)));}else if(f?.status==='pending'&&f.requestedBy===state.uid){acts.append(make('span','pill','Requested'));}else if(f?.status==='pending'){acts.append(btn('Accept',()=>acceptFriend(uid)));}else{acts.append(btn('Add Friend',()=>requestFriend(uid)));}row.append(acts);return row;}
+
+// Friend requests. Only the receiver can accept; matching Firestore rules enforce this.
+async function requestFriend(uid){if(!signedInOnly()||uid===state.uid)return;status('peopleStatus','Sending friend request…');try{const key=pairKey(state.uid,uid);await setDoc(doc(db,'friendships',key),{participants:[state.uid,uid].sort(),requestedBy:state.uid,requestedTo:uid,status:'pending',createdAt:serverTimestamp(),updatedAt:serverTimestamp()});status('peopleStatus','Friend request sent.','good');}catch(e){status('peopleStatus',displayError(e),'error');}}
+async function acceptFriend(uid){const key=pairKey(state.uid,uid),f=state.friendships.get(key);if(!f||f.status!=='pending'||f.requestedTo!==state.uid)return;try{await setDoc(doc(db,'friendships',key),{status:'accepted',updatedAt:serverTimestamp()},{merge:true});status('friendStatus','Friend request accepted! You can now message each other.','good');}catch(e){status('friendStatus',displayError(e),'error');}}
+async function removeFriend(uid){const f=friendshipFor(uid);if(!f)return;if(!confirm(f.status==='accepted'?'Remove this friend?':'Cancel or decline this request?'))return;try{await deleteDoc(doc(db,'friendships',pairKey(state.uid,uid)));if(state.activePeer===uid&&!isLegacyFriend(uid))clearChat();status('friendStatus','Updated successfully.','good');}catch(e){status('friendStatus',displayError(e),'error');}}
+function friendEntry(uid,mode){const name=nameFor(uid);const row=make('div','list-row');row.append(face(name));const center=make('div','grow');center.append(make('strong','',name));row.append(center);const acts=make('div','actions');if(mode==='accepted'||mode==='legacy'){acts.append(btn('Chat',()=>openChat(uid)));if(mode!=='legacy')acts.append(btn('Remove',()=>removeFriend(uid),'ghost'));}if(mode==='incoming'){acts.append(btn('Accept',()=>acceptFriend(uid)));acts.append(btn('Decline',()=>removeFriend(uid),'ghost'));}if(mode==='outgoing')acts.append(btn('Cancel',()=>removeFriend(uid),'ghost'));row.append(acts);return row;}
+function renderFriends(){const accepted=[],incoming=[],outgoing=[];for(const f of state.friendships.values()){if(!Array.isArray(f.participants))continue;const other=f.participants.find(x=>x!==state.uid);if(!other)continue;if(isLegacyFriend(other))continue;if(f.status==='accepted')accepted.push(other);else if(f.status==='pending'){if(f.requestedTo===state.uid)incoming.push(other);else outgoing.push(other);}}if(state.uid===DANU)accepted.unshift(ALEX);if(state.uid===ALEX)accepted.unshift(DANU);$('friendCount').textContent=accepted.length+' total';function fill(id,uids,mode,empty){const el=$(id);el.replaceChildren();if(!uids.length){el.append(make('div','small muted',empty));return;}uids.forEach(uid=>el.append(friendEntry(uid,isLegacyFriend(uid)?'legacy':mode)));}fill('friendsList',accepted,'accepted','No friends yet. Find people and send requests.');fill('incomingList',incoming,'incoming','No requests.');fill('outgoingList',outgoing,'outgoing','No pending requests.');}
+function watchFriendships(uid){const qry=query(collection(db,'friendships'),where('participants','array-contains',uid));const unsub=onSnapshot(qry,snap=>{if(state.uid!==uid)return;state.friendships.clear();for(const d of snap.docs)state.friendships.set(d.id,d.data());renderFriends();loadPeople();const others=[...state.friendships.values()].map(f=>f.participants?.find(x=>x!==uid)).filter(Boolean);fetchNames(others).then(()=>{if(state.uid===uid)renderFriends();});if(state.activePeer&&!isLegacyFriend(state.activePeer)&&friendshipFor(state.activePeer)?.status!=='accepted')clearChat();},e=>status('friendStatus',displayError(e),'error'));state.unsubs.push(unsub);}
+
+// New messages are visible as delivered only after Firebase confirms the write.
+function clearChat(){if(state.chatUnsub){state.chatUnsub();state.chatUnsub=null;}state.activeChat=null;state.activePeer=null;$('chatName').textContent='Choose a friend';$('messageList').replaceChildren(make('div','empty','Select a friend from Friends.'));$('messageInput').disabled=true;$('sendBtn').disabled=true;$('chatEmojiBtn').disabled=true;status('messageStatus','');}
+function openChat(uid){if(!signedInOnly())return;const f=friendshipFor(uid);if(!isLegacyFriend(uid)&&f?.status!=='accepted'){status('friendStatus','Accept the friend request first.','error');return;}if(state.chatUnsub){state.chatUnsub();state.chatUnsub=null;}state.activePeer=uid;state.activeChat=chatKey(state.uid,uid);$('chatName').textContent='Chat with '+nameFor(uid);$('messageInput').disabled=false;$('sendBtn').disabled=false;$('chatEmojiBtn').disabled=false;try{localStorage.setItem('mySocialLastChat_'+state.uid,uid);}catch{}$('messageList').replaceChildren(make('div','loading','Loading saved messages…'));status('messageStatus','');$('chat').scrollIntoView({behavior:'smooth',block:'start'});const id=state.activeChat;state.chatUnsub=onSnapshot(collection(db,'conversations',id,'messages'),{includeMetadataChanges:true},snap=>{if(state.activeChat!==id)return;const list=$('messageList');list.replaceChildren();const docs=snap.docs.filter(d=>!d.metadata.hasPendingWrites).sort((a,b)=>tsValue(a.data().createdAt)-tsValue(b.data().createdAt));for(const d of docs.slice(-150)){const data=d.data();const who=data.senderId?nameFor(data.senderId):(data.sender||'Older message');const bubble=make('div','bubble'+(data.senderId===state.uid?' mine':''));bubble.append(make('div','who',who),make('div','',data.text||''));const t=timeLabel(data.createdAt);if(t)bubble.append(make('div','when',t));list.append(bubble);}if(!docs.length)list.append(make('div','empty','No messages yet. Say hello!'));list.scrollTop=list.scrollHeight;},e=>{status('messageStatus',displayError(e),'error');$('messageList').replaceChildren(make('div','empty','Could not load conversation.'));});}
+$('messageForm').addEventListener('submit',async e=>{e.preventDefault();if(!signedInOnly()||!state.activeChat||state.sending)return;const text=$('messageInput').value.trim(),chatId=state.activeChat;if(!text)return;state.sending=true;$('sendBtn').disabled=true;status('messageStatus','Sending…');try{await addDoc(collection(db,'conversations',chatId,'messages'),{senderId:state.uid,text,createdAt:serverTimestamp()});if(state.activeChat===chatId){$('messageInput').value='';status('messageStatus','Sent and saved in Firebase.','good');}}catch(err){status('messageStatus','Not saved: '+displayError(err),'error');}finally{state.sending=false;$('sendBtn').disabled=!state.activeChat;}});
+
+
+// Emoji buttons insert at the caret in both messages and posts. Comment input uses the same picker.
+const EMOJI_LIST=['😀','😃','😄','😁','😂','🤣','😊','😍','🥰','😘','😎','🥳','🤩','😇','🙌','👏','👍','👎','🙏','💙','❤️','💕','💯','🔥','✨','🎉','🌍','📍','📷','🍀','☀️','🌈','😢','😭','😮'];
+function insertEmojiInto(el,emoji){if(!el||el.disabled)return;const a=el.selectionStart??el.value.length,b=el.selectionEnd??a;el.value=el.value.slice(0,a)+emoji+el.value.slice(b);el.focus();const pos=a+emoji.length;el.setSelectionRange?.(pos,pos);el.dispatchEvent(new Event('input',{bubbles:true}));}
+function attachEmojiPicker(button,picker,input){for(const emoji of EMOJI_LIST){const b=make('button','',emoji);b.type='button';b.setAttribute('aria-label','Insert '+emoji);b.addEventListener('click',()=>{insertEmojiInto(input,emoji);});picker.append(b);}button.addEventListener('click',()=>{for(const p of document.querySelectorAll('.emoji-picker'))if(p!==picker)p.classList.add('hide');picker.classList.toggle('hide');});}
+attachEmojiPicker($('postEmojiBtn'),$('postEmojiPicker'),$('postInput'));
+attachEmojiPicker($('chatEmojiBtn'),$('chatEmojiPicker'),$('messageInput'));
+document.addEventListener('click',e=>{if(!e.target.closest('.emoji-holder'))for(const p of document.querySelectorAll('.emoji-picker'))p.classList.add('hide');});
+$('addLocationBtn').addEventListener('click',()=>{$('placeBox').classList.toggle('hide');if(!$('placeBox').classList.contains('hide'))$('postPlace').focus();else $('postPlace').value='';});
+let preparedPhotoData='';
+function clearSelectedPhoto(){preparedPhotoData='';$('postPhotoFile').value='';$('photoPreview').classList.add('hide');$('photoPreviewImage').removeAttribute('src');}
+$('removePhotoBtn').addEventListener('click',clearSelectedPhoto);
+$('addPhotoBtn').addEventListener('click',()=>$('postPhotoFile').click());
+async function compressPhoto(file){
+ if(!file.type.startsWith('image/'))throw Error('Please choose a photo file.');
+ if(file.size>12*1024*1024)throw Error('Choose a photo smaller than 12 MB.');
+ const objectUrl=URL.createObjectURL(file);const img=new Image();
+ try{await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(Error('This photo could not be opened.'));img.src=objectUrl;});}
+ finally{URL.revokeObjectURL(objectUrl);}
+ let side=900,quality=.72;const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');if(!ctx)throw Error('Photo compression is unavailable in this browser.');
+ for(let attempt=0;attempt<14;attempt++){
+   const scale=Math.min(1,side/Math.max(img.naturalWidth,img.naturalHeight));canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+   ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
+   const out=canvas.toDataURL('image/webp',quality);
+   if(!out.startsWith('data:image/webp;base64,'))throw Error('This browser cannot prepare a WebP photo.');
+   if(out.length<=165000)return out;
+   if(quality>.37)quality-=.1;else{quality=.65;side=Math.round(side*.78);}
+ }
+ throw Error('This photo is too detailed for a compact feed post. Try a different photo.');
+}
+$('postPhotoFile').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;preparedPhotoData='';status('postStatus','Preparing a small photo…');$('addPhotoBtn').disabled=true;try{preparedPhotoData=await compressPhoto(file);$('photoPreviewImage').src=preparedPhotoData;$('photoPreview').classList.remove('hide');status('postStatus','Photo ready. Add a caption or publish it as-is.','good');}catch(err){clearSelectedPhoto();status('postStatus',err.message,'error');}finally{$('addPhotoBtn').disabled=false;}});
+function sharePostText(d){return [d.text||'',d.location?'📍 '+d.location:'',d.imageData?'📷 Photo in My Social':''].filter(Boolean).join('\n');}
+async function copyShareContent(value){
+ try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(value);return true;}}catch(e){console.warn('Clipboard API not available:',e);}
+ const input=document.createElement('textarea');input.value=value;input.style.position='fixed';input.style.opacity='0';document.body.append(input);input.select();let ok=false;try{ok=document.execCommand('copy');}finally{input.remove();}return ok;
+}
+async function shareLink(postId,data,panelStatus){
+ const hosted=location.protocol==='http:'||location.protocol==='https:';
+ const link=hosted?location.origin+location.pathname+'#post='+encodeURIComponent(postId):'';
+ const content=(link?link+'\n':'')+sharePostText(data);
+ const copied=await copyShareContent(content);
+ panelStatus.textContent=copied?(hosted?'Post link and text copied.':'Post text copied. Publish the site online to share clickable links.'):'Copy failed; use the Share button again or select text manually.';
+}
+function toggleShare(postId,data,wrapper,button){let panel=wrapper.querySelector('.share-panel');if(panel){panel.remove();button.textContent='↗ Share';return;}
+ panel=make('div','share-panel');const message=make('div','small muted','Share this post with others.');const actions=make('div','stack');
+ const copyButton=btn('🔗 Copy post',async()=>{await shareLink(postId,data,message);},'secondary');
+ const repostButton=btn('🔁 Share to my feed',async()=>{if(!signedInOnly())return;repostButton.disabled=true;message.textContent='Sharing…';try{const author=nameFor(data.authorId);const text=('🔁 Shared from '+author+(data.text?'\n'+data.text:'')).slice(0,1500);const payload={authorId:state.uid,text,createdAt:serverTimestamp()};if(data.location)payload.location=data.location;if(data.imageData)payload.imageData=data.imageData;await addDoc(collection(db,'posts'),payload);message.textContent='Shared to your feed!';}catch(e){message.textContent=displayError(e);}finally{repostButton.disabled=false;}},'secondary');
+ actions.append(copyButton,repostButton);
+ if(navigator.share){const native=btn('📤 More options',async()=>{try{const hosted=location.protocol==='https:'||location.protocol==='http:';await navigator.share({title:'My Social post',text:sharePostText(data),...(hosted?{url:location.origin+location.pathname+'#post='+encodeURIComponent(postId)}:{})});message.textContent='Shared.';}catch(e){if(e.name!=='AbortError')message.textContent='Could not open sharing: '+e.message;}},'secondary');actions.append(native);}
+ panel.append(message,actions);wrapper.append(panel);button.textContent='Close share';
+}
+
+// Shared posts, likes, and comments. No browser-only "fake" posts.
+$('postBtn').addEventListener('click',async()=>{
+ if(!signedInOnly()||state.posting)return;
+ const text=$('postInput').value.trim(),locationText=$('postPlace').value.trim();
+ if(!text&&!preparedPhotoData){status('postStatus','Write a message or choose a photo first.','error');return;}
+ if(locationText.length>80){status('postStatus','The place name is too long.','error');return;}
+ state.posting=true;$('postBtn').disabled=true;status('postStatus','Publishing…');
+ try{const data={authorId:state.uid,text,createdAt:serverTimestamp()};
+  if(locationText)data.location=locationText;
+  if(preparedPhotoData)data.imageData=preparedPhotoData;
+  await addDoc(collection(db,'posts'),data);
+  $('postInput').value='';$('postPlace').value='';$('placeBox').classList.add('hide');clearSelectedPhoto();
+  status('postStatus','Your post was published!','good');
+ }catch(e){status('postStatus','Not published: '+displayError(e),'error');}
+ finally{state.posting=false;$('postBtn').disabled=false;}
+});
+function watchPosts(uid){const qry=query(collection(db,'posts'),orderBy('createdAt','desc'),limit(25));state.postUnsub=onSnapshot(qry,async snap=>{if(state.uid!==uid)return;await fetchNames(snap.docs.map(d=>d.data().authorId));if(state.uid!==uid)return;const box=$('postsList');box.replaceChildren();if(!snap.docs.length)box.append(make('div','empty','No posts yet. Share the first one!'));for(const d of snap.docs){if(d.metadata.hasPendingWrites)continue;const data=d.data();const wrapper=make('article','post');const authorRow=make('div','row');authorRow.append(face(nameFor(data.authorId)));const info=make('div','grow');info.append(make('strong','',nameFor(data.authorId)),make('div','small muted',timeLabel(data.createdAt)));authorRow.append(info);wrapper.id='post-'+d.id;wrapper.append(authorRow);
+ if(data.location)wrapper.append(make('div','post-location','📍 '+data.location));
+ if(data.text)wrapper.append(make('div','body',data.text));
+ if(typeof data.imageData==='string'&&data.imageData.startsWith('data:image/webp;base64,')){
+   const photo=make('img','post-photo');photo.src=data.imageData;photo.alt='Photo uploaded by '+nameFor(data.authorId);photo.loading='lazy';wrapper.append(photo);
+ }
+ const actions=make('div','post-actions');const likeB=btn('♡ Like',()=>toggleLike(d.id,likeB),'ghost');
+ const commentsB=btn('💬 Comments',()=>toggleComments(d.id,wrapper,commentsB),'secondary');
+ const shareB=btn('↗ Share',()=>toggleShare(d.id,data,wrapper,shareB),'secondary');
+ actions.append(likeB,commentsB,shareB);
+ if(data.authorId===state.uid)actions.append(btn('Delete',()=>removePost(d.id),'danger'));
+ wrapper.append(actions);box.append(wrapper);updateLikeButton(d.id,likeB);
+ }
+ const highlighted=decodeURIComponent((location.hash.match(/^#post=(.+)$/)||[])[1]||'');
+ if(highlighted){const target=document.getElementById('post-'+highlighted);if(target)setTimeout(()=>target.scrollIntoView({block:'center',behavior:'smooth'}),80);}
+ },e=>status('postStatus',displayError(e),'error'));}
+async function updateLikeButton(postId,button){try{const likes=await getDocs(collection(db,'posts',postId,'likes'));if(!button.isConnected)return;const liked=likes.docs.some(d=>d.id===state.uid);button.textContent=(liked?'♥ Liked ':'♡ Like ')+likes.size;button.dataset.liked=liked?'yes':'no';}catch(e){console.warn('Could not read likes:',e);}}
+async function toggleLike(postId,button){if(!signedInOnly())return;button.disabled=true;try{const ref=doc(db,'posts',postId,'likes',state.uid);if(button.dataset.liked==='yes')await deleteDoc(ref);else await setDoc(ref,{createdAt:serverTimestamp()});await updateLikeButton(postId,button);}catch(e){status('postStatus',displayError(e),'error');}finally{button.disabled=false;}}
+async function toggleComments(postId,wrapper,button){let panel=wrapper.querySelector('.comments');if(panel){panel.remove();button.textContent='💬 Comments';return;}panel=make('div','comments');const box=make('div','', 'Loading comments…');panel.append(box);const form=make('form','comment-form');const input=make('input');input.placeholder='Write a comment…';input.maxLength=500;input.required=true;const submit=make('button','small','Reply');submit.type='submit';const emojiHolder=make('span','emoji-holder'),emojiButton=make('button','secondary emoji-mini','😊'),emojiPicker=make('span','emoji-picker hide');emojiButton.type='button';emojiHolder.append(emojiButton,emojiPicker);attachEmojiPicker(emojiButton,emojiPicker,input);form.append(input,emojiHolder,submit);form.addEventListener('submit',async e=>{e.preventDefault();const text=input.value.trim();if(!text||!signedInOnly())return;submit.disabled=true;try{await addDoc(collection(db,'posts',postId,'comments'),{authorId:state.uid,text,createdAt:serverTimestamp()});input.value='';await showComments(postId,box);}catch(err){status('postStatus',displayError(err),'error');}finally{submit.disabled=false;}});panel.append(form);wrapper.append(panel);button.textContent='Hide comments';await showComments(postId,box);}
+async function showComments(postId,el){try{const snap=await getDocs(query(collection(db,'posts',postId,'comments'),orderBy('createdAt','asc'),limit(50)));if(!el.isConnected)return;el.replaceChildren();if(!snap.size)el.append(make('div','small muted','No comments yet.'));snap.forEach(d=>{const x=d.data();el.append(make('div','comment',nameFor(x.authorId)+': '+x.text));});}catch(e){el.textContent=displayError(e);}}
+async function removePost(postId){if(!confirm('Delete your post?'))return;try{await deleteDoc(doc(db,'posts',postId));status('postStatus','Post deleted.','good');}catch(e){status('postStatus',displayError(e),'error');}}
+
+onAuthStateChanged(auth,async user=>{const generation=++state.authGeneration;unsubscribeAll();state.uid=user?.uid||null;state.user=user||null;state.me=null;$('appLayout').classList.toggle('hide',!user);$('loginBtn').disabled=!!user;$('signupBtn').disabled=!!user;$('logoutBtn').disabled=!user;$('headerStatus').textContent=user?'● Logged In':'○ Logged Out';if(!user){status('authStatus','Sign in or create an account to continue.');return;}status('authStatus','Setting up your profile…');try{state.me=await ensureProfile(user);if(state.authGeneration!==generation)return;state.profiles.set(user.uid,state.me);state.profiles.set(DANU,state.profiles.get(DANU)||{displayName:'Danu'});state.profiles.set(ALEX,state.profiles.get(ALEX)||{displayName:'Alex'});showProfile();renderFriends();watchFriendships(user.uid);watchPosts(user.uid);await loadPeople();status('authStatus','Signed in as '+user.email,'good');}catch(e){status('authStatus','Signed in, but profile setup failed: '+displayError(e),'error');}});
 </script>
-
-
 </body>
 </html>

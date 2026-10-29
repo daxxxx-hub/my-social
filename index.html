@@ -88,7 +88,7 @@
 /* My Social Calls: in-chat voice and video with browser media permission. */
 .call-buttons{display:flex;gap:7px;flex-wrap:wrap}
 .call-buttons button{font-size:13px;padding:8px 10px}
-.incoming-call{position:sticky;top:67px;z-index:11;background:#eaf4ff;border:2px solid #1877f2;border-radius:13px;padding:12px 15px;margin-bottom:16px;box-shadow:0 4px 18px #153b632e;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.incoming-call{position:fixed;top:16px;left:16px;right:16px;max-width:640px;margin:0 auto;z-index:1000;background:#eaf4ff;border:2px solid #1877f2;border-radius:13px;padding:12px 15px;margin-bottom:16px;box-shadow:0 4px 18px #153b632e;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .incoming-call strong{color:#145bb2;flex:1 1 170px;overflow-wrap:anywhere}
 .call-panel{border:1px solid #bfdaff;background:#f1f7ff;border-radius:12px;margin-top:12px;padding:14px}
 .call-head{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
@@ -99,7 +99,7 @@
 .call-controls{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 .call-controls button{font-size:13px}
 .call-note{font-size:12px;color:#5f7184;line-height:1.5}
-@media(max-width:650px){.incoming-call{top:104px}.call-videos{grid-template-columns:1fr 1fr}.call-videos video,.call-videos .local-video{height:155px}.call-buttons{width:100%}}
+@media(max-width:650px){.incoming-call{top:max(12px,env(safe-area-inset-top));left:10px;right:10px;max-height:70vh;overflow-y:auto}.call-videos{grid-template-columns:1fr 1fr}.call-videos video,.call-videos .local-video{height:155px}.call-buttons{width:100%}}
 </style>
 </head>
 <body>
@@ -548,10 +548,12 @@ function watchIncomingCalls(uid){
   const unsub=onSnapshot(q,snap=>{
     if(state.uid!==uid)return;
     if(callState.id||callState.starting){hideIncomingCall();return;}
-    const options=snap.docs.map(d=>({id:d.id,...d.data()})).filter(d=>{
-      const age=Date.now()-tsValue(d.createdAt);
-      return d.status==='ringing'&&d.callerId!==uid&&!isBlocked(d.callerId)&&age>=0&&age<1000*90;
-    }).sort((a,b)=>tsValue(b.createdAt)-tsValue(a.createdAt));
+    // Do not compare Firestore timestamps against this device's clock here:
+    // a misconfigured clock can silently hide a valid incoming call.
+    // Only live ringing calls are displayed; caller/callee actions end them.
+    const options=snap.docs.map(d=>({id:d.id,...d.data()})).filter(d=>
+      d.status==='ringing'&&d.calleeId===uid&&d.callerId!==uid&&!isBlocked(d.callerId)
+    ).sort((a,b)=>tsValue(b.createdAt)-tsValue(a.createdAt));
     if(options.length)showIncomingCall(options[0]);else hideIncomingCall();
   },e=>status('messageStatus','Call notifications unavailable: '+displayError(e),'error'));
   state.unsubs.push(unsub);

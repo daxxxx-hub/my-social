@@ -67,12 +67,46 @@
   width: 100%;
 }
 
+
+/* Emoji menu accessibility fix: all three pickers open upward. */
+.emoji-picker {
+  top: auto;
+  bottom: calc(100% + 8px);
+  max-height: min(300px, 55vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+/* Let chat emojis rise above the input bar rather than being clipped. */
+.msg-panel { overflow: visible; }
+.compose { position: relative; z-index: 3; border-radius: 0 0 12px 12px; }
+.composer-tools, .comments, .comment-form { position: relative; }
+/* Keep the popup aligned inside the chat and comment areas. */
+#chatEmojiPicker, .comment-form .emoji-picker { left: auto; right: 0; }
+#postEmojiPicker { left: 0; right: auto; }
+.emoji-picker button { min-height: 34px; touch-action: manipulation; }
+
+/* My Social Calls: in-chat voice and video with browser media permission. */
+.call-buttons{display:flex;gap:7px;flex-wrap:wrap}
+.call-buttons button{font-size:13px;padding:8px 10px}
+.incoming-call{position:sticky;top:67px;z-index:11;background:#eaf4ff;border:2px solid #1877f2;border-radius:13px;padding:12px 15px;margin-bottom:16px;box-shadow:0 4px 18px #153b632e;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.incoming-call strong{color:#145bb2;flex:1 1 170px;overflow-wrap:anywhere}
+.call-panel{border:1px solid #bfdaff;background:#f1f7ff;border-radius:12px;margin-top:12px;padding:14px}
+.call-head{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.call-videos{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:10px;margin:12px 0}
+.call-videos video{width:100%;height:220px;object-fit:cover;background:#1b263a;border-radius:10px}
+.call-videos .local-video{height:220px}
+.call-videos.voice{display:none}
+.call-controls{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.call-controls button{font-size:13px}
+.call-note{font-size:12px;color:#5f7184;line-height:1.5}
+@media(max-width:650px){.incoming-call{top:104px}.call-videos{grid-template-columns:1fr 1fr}.call-videos video,.call-videos .local-video{height:155px}.call-buttons{width:100%}}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="top-inner"><div class="brand">My Social <span>💙</span></div><nav class="nav"><button data-go="feed">🏠 Home</button><button data-go="people">👥 People</button><button data-go="friends">🤝 Friends</button><button data-go="chat">💬 Chat</button></nav></div></header>
 <div class="wrap">
   <div class="intro"><div><h1>Connect, share, and chat 💙</h1><p>Your community, your friends, your conversations.</p></div><span class="pill" id="headerStatus">Connecting…</span></div>
+  <div class="incoming-call hide" id="incomingCallBanner" role="alert"><strong id="incomingCallText">Incoming call</strong><button id="answerIncomingBtn" type="button">✅ Answer</button><button id="declineIncomingBtn" class="danger" type="button">Decline</button></div>
   <section class="card" id="authCard"><h2>Welcome to My Social</h2><p class="muted small">Sign in with your existing My Social account, or create a new account. Your original Firebase project is preserved.</p>
     <div class="auth-grid"><div><label class="label" for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div><label class="label" for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"></div><div class="wide"><label class="label" for="signupName">Display name (for new accounts)</label><input id="signupName" maxlength="40" placeholder="How people will find you"></div></div>
     <div class="auth-actions"><button id="loginBtn">Log In</button><button class="secondary" id="signupBtn">Create Account</button><button class="ghost" id="logoutBtn" disabled>Log Out</button><button class="secondary" type="button" id="forgotPasswordBtn">🔑 Forgot Password?</button></div><div id="authStatus" class="status" role="status" aria-live="polite"></div>
@@ -98,7 +132,12 @@
 <div class="composer-tools"><button type="button" id="postBtn">Publish Post 💙</button></div>
 <p class="photo-note">Photo posts are automatically reduced in size for this demo. One photo per post; no paid storage setup needed.</p>
 <p class="status" id="postStatus" aria-live="polite"></p><div id="postsList" class="loading">Loading community posts…</div></section>
-      <section class="card" id="chat"><div class="head"><h2>💬 Private Messages</h2></div><p class="muted small">Select a friend to chat. New people must accept a friend request before you can message each other.</p><div class="msg-panel"><div class="msg-head" id="chatName">Choose a friend</div><div id="messageList" class="msg-history"><div class="empty">Select a friend from the Friends section.</div></div><form id="messageForm" class="compose"><input id="messageInput" maxlength="2000" placeholder="Type a message…" disabled required autocomplete="off"><span class="emoji-holder"><button id="chatEmojiBtn" class="secondary emoji-mini" type="button" disabled aria-label="Add emoji to message">😊</button><span class="emoji-picker hide" id="chatEmojiPicker" aria-label="Choose a message emoji"></span></span><button id="sendBtn" type="submit" disabled>Send</button></form></div><p class="status" id="messageStatus" aria-live="polite"></p></section>
+      <section class="card" id="chat"><div class="head"><h2>💬 Private Messages</h2><div class="call-buttons"><button type="button" class="secondary" id="voiceCallBtn" disabled>📞 Voice Call</button><button type="button" class="secondary" id="videoCallBtn" disabled>🎥 Video Call</button></div></div><p class="muted small">Select a friend to chat. New people must accept a friend request before you can message each other.</p><div class="msg-panel"><div class="msg-head" id="chatName">Choose a friend</div><div id="messageList" class="msg-history"><div class="empty">Select a friend from the Friends section.</div></div><form id="messageForm" class="compose"><input id="messageInput" maxlength="2000" placeholder="Type a message…" disabled required autocomplete="off"><span class="emoji-holder"><button id="chatEmojiBtn" class="secondary emoji-mini" type="button" disabled aria-label="Add emoji to message">😊</button><span class="emoji-picker hide" id="chatEmojiPicker" aria-label="Choose a message emoji"></span></span><button id="sendBtn" type="submit" disabled>Send</button></form></div><p class="status" id="messageStatus" aria-live="polite"></p>
+<div id="callPanel" class="call-panel hide" aria-live="polite"><div class="call-head"><strong id="callTitle">Voice call</strong><span id="callPhase" class="pill">Connecting</span></div>
+<div id="callVideos" class="call-videos voice"><video id="remoteCallVideo" autoplay playsinline aria-label="Other person's video"></video><video id="localCallVideo" class="local-video" autoplay muted playsinline aria-label="Your camera preview"></video></div>
+<audio id="remoteCallAudio" autoplay></audio>
+<div class="call-controls"><button id="muteCallBtn" class="secondary" type="button">🎙️ Mute</button><button id="cameraCallBtn" class="secondary" type="button">📷 Camera off</button><button id="playCallSoundBtn" class="secondary" type="button">🔊 Play sound</button><button id="hangupCallBtn" class="danger" type="button">📵 Hang up</button></div>
+<p class="status" id="callStatus" role="status"></p><p class="call-note">Calls use your microphone/camera only after you choose Call or Answer. Both friends must keep My Social open. Some networks require a TURN server.</p></div></section>
     </main>
     <aside class="right"><section class="card" id="people"><div class="head"><h2>👥 Find People</h2></div><label class="label" for="peopleSearch">Search by display name</label><input id="peopleSearch" type="search" placeholder="Search people…" maxlength="40"><p class="note">Searches public display names, not email addresses.</p><div id="peopleList" class="loading">Loading people…</div><p class="status" id="peopleStatus" aria-live="polite"></p></section>
       <section class="card"><h2>🔒 About privacy</h2><p class="small muted">Only signed-in members can view the directory and feed. Private messages are restricted to their two participants after a friend request is accepted.</p><p class="small muted">Blocking stops new friend requests and messages between two users. Reported accounts are sent privately to the site owner for manual review. This is a basic safety tool, not automatic moderation; feed posts remain visible to signed-in members.</p><p class="small muted">Your account password is handled by Firebase Authentication. Never share it.</p></section>
@@ -127,7 +166,7 @@
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js';
 import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail,signOut,updateProfile} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js';
-import {getFirestore,doc,getDoc,setDoc,addDoc,deleteDoc,collection,query,where,orderBy,startAt,endAt,limit,getDocs,onSnapshot,serverTimestamp} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
+import {getFirestore,doc,getDoc,setDoc,addDoc,updateDoc,deleteDoc,collection,query,where,orderBy,startAt,endAt,limit,getDocs,onSnapshot,serverTimestamp} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
 
 // This is the ORIGINAL My Social Firebase project. Keep this configuration.
 const firebaseConfig={apiKey:'AIzaSyDoXBu86nx1hQBYEzapMZdJm3XXckGPEs8',authDomain:'my-social-11308.firebaseapp.com',projectId:'my-social-11308',storageBucket:'my-social-11308.firebasestorage.app',messagingSenderId:'581747567782',appId:'1:581747567782:web:325dcbc4d3c791bfd01867'};
@@ -150,7 +189,7 @@ function initials(name){return str(name).trim().split(/\s+/).slice(0,2).map(x=>x
 function face(name){return make('span','avatar',initials(name));}
 function tsValue(t){if(t?.toMillis)return t.toMillis();if(t?.seconds)return t.seconds*1000;return 0;}
 function timeLabel(t){const n=tsValue(t);return n?new Date(n).toLocaleString():'';}
-function unsubscribeAll(){state.unsubs.forEach(f=>{try{f();}catch{}});state.unsubs=[];if(state.chatUnsub){state.chatUnsub();state.chatUnsub=null;}if(state.postUnsub){state.postUnsub();state.postUnsub=null;}clearTimeout(state.peopleTimer);state.activeChat=null;state.activePeer=null;state.friendships.clear();state.blocks.clear();state.reportTargetUid=null;state.profiles.clear();}
+function unsubscribeAll(){cleanupCall('Call closed.'); hideIncomingCall();state.unsubs.forEach(f=>{try{f();}catch{}});state.unsubs=[];if(state.chatUnsub){state.chatUnsub();state.chatUnsub=null;}if(state.postUnsub){state.postUnsub();state.postUnsub=null;}clearTimeout(state.peopleTimer);state.activeChat=null;state.activePeer=null;state.friendships.clear();state.blocks.clear();state.reportTargetUid=null;state.profiles.clear();}
 function signedInOnly(){return !!auth.currentUser&&!!state.uid;}
 
 // Login and signup use the user's existing Firebase Authentication project.
@@ -183,7 +222,7 @@ $('forgotPasswordBtn').addEventListener('click', async () => {
 });
 $('loginBtn').addEventListener('click',()=>authAction('login'));
 $('signupBtn').addEventListener('click',()=>authAction('signup'));
-$('logoutBtn').addEventListener('click',async()=>{try{await signOut(auth);status('authStatus','Logged out.','good');}catch(e){status('authStatus',displayError(e),'error');}});
+$('logoutBtn').addEventListener('click',async()=>{try{if(callState.id)await endCurrentCall();await signOut(auth);status('authStatus','Logged out.','good');}catch(e){status('authStatus',displayError(e),'error');}});
 for(const b of document.querySelectorAll('[data-go]'))b.addEventListener('click',()=>{
  if(b.dataset.go==='chat' && signedInOnly()){
    if(state.activePeer){$('chat').scrollIntoView({behavior:'smooth',block:'start'});return;}
@@ -254,6 +293,7 @@ async function blockUser(uid){
    // Removing the friendship is best-effort; security rules already deny contact.
    try{if(friendshipFor(uid))await deleteDoc(doc(db,'friendships',pairKey(state.uid,uid)));}
    catch(err){console.warn('Block succeeded; removing friendship was not possible:',err);}
+   if(callState.peer===uid && callState.id)await endCurrentCall();
    if(state.activePeer===uid)clearChat();
    status('blockStatus','Account blocked. New messages and requests are prevented.','good');
  }catch(err){status('blockStatus','Could not block account: '+displayError(err),'error');}
@@ -289,15 +329,15 @@ $('reportForm').addEventListener('submit',async e=>{
 });
 
 // New messages are visible as delivered only after Firebase confirms the write.
-function clearChat(){if(state.chatUnsub){state.chatUnsub();state.chatUnsub=null;}state.activeChat=null;state.activePeer=null;$('chatName').textContent='Choose a friend';$('messageList').replaceChildren(make('div','empty','Select a friend from Friends.'));$('messageInput').disabled=true;$('sendBtn').disabled=true;$('chatEmojiBtn').disabled=true;status('messageStatus','');}
-function openChat(uid){if(!signedInOnly())return;if(isBlocked(uid)){status('friendStatus','Unblock this account before chatting.','error');return;}const f=friendshipFor(uid);if(!isLegacyFriend(uid)&&f?.status!=='accepted'){status('friendStatus','Accept the friend request first.','error');return;}if(state.chatUnsub){state.chatUnsub();state.chatUnsub=null;}state.activePeer=uid;state.activeChat=chatKey(state.uid,uid);$('chatName').textContent='Chat with '+nameFor(uid);$('messageInput').disabled=false;$('sendBtn').disabled=false;$('chatEmojiBtn').disabled=false;try{localStorage.setItem('mySocialLastChat_'+state.uid,uid);}catch{}$('messageList').replaceChildren(make('div','loading','Loading saved messages…'));status('messageStatus','');$('chat').scrollIntoView({behavior:'smooth',block:'start'});const id=state.activeChat;state.chatUnsub=onSnapshot(collection(db,'conversations',id,'messages'),{includeMetadataChanges:true},snap=>{if(state.activeChat!==id)return;const list=$('messageList');list.replaceChildren();const docs=snap.docs.filter(d=>!d.metadata.hasPendingWrites).sort((a,b)=>tsValue(a.data().createdAt)-tsValue(b.data().createdAt));for(const d of docs.slice(-150)){const data=d.data();const who=data.senderId?nameFor(data.senderId):(data.sender||'Older message');const bubble=make('div','bubble'+(data.senderId===state.uid?' mine':''));bubble.append(make('div','who',who),make('div','',data.text||''));const t=timeLabel(data.createdAt);if(t)bubble.append(make('div','when',t));list.append(bubble);}if(!docs.length)list.append(make('div','empty','No messages yet. Say hello!'));list.scrollTop=list.scrollHeight;},e=>{status('messageStatus',displayError(e),'error');$('messageList').replaceChildren(make('div','empty','Could not load conversation.'));});}
+function clearChat(){if(state.chatUnsub){state.chatUnsub();state.chatUnsub=null;}state.activeChat=null;state.activePeer=null;$('chatName').textContent='Choose a friend';$('messageList').replaceChildren(make('div','empty','Select a friend from Friends.'));$('messageInput').disabled=true;$('sendBtn').disabled=true;$('chatEmojiBtn').disabled=true;$('voiceCallBtn').disabled=true;$('videoCallBtn').disabled=true;status('messageStatus','');}
+function openChat(uid){if(!signedInOnly())return;if(isBlocked(uid)){status('friendStatus','Unblock this account before chatting.','error');return;}const f=friendshipFor(uid);if(!isLegacyFriend(uid)&&f?.status!=='accepted'){status('friendStatus','Accept the friend request first.','error');return;}if(state.chatUnsub){state.chatUnsub();state.chatUnsub=null;}state.activePeer=uid;state.activeChat=chatKey(state.uid,uid);$('chatName').textContent='Chat with '+nameFor(uid);$('messageInput').disabled=false;$('sendBtn').disabled=false;$('chatEmojiBtn').disabled=false;$('voiceCallBtn').disabled=!!callState.id;$('videoCallBtn').disabled=!!callState.id;try{localStorage.setItem('mySocialLastChat_'+state.uid,uid);}catch{}$('messageList').replaceChildren(make('div','loading','Loading saved messages…'));status('messageStatus','');$('chat').scrollIntoView({behavior:'smooth',block:'start'});const id=state.activeChat;state.chatUnsub=onSnapshot(collection(db,'conversations',id,'messages'),{includeMetadataChanges:true},snap=>{if(state.activeChat!==id)return;const list=$('messageList');list.replaceChildren();const docs=snap.docs.filter(d=>!d.metadata.hasPendingWrites).sort((a,b)=>tsValue(a.data().createdAt)-tsValue(b.data().createdAt));for(const d of docs.slice(-150)){const data=d.data();const who=data.senderId?nameFor(data.senderId):(data.sender||'Older message');const bubble=make('div','bubble'+(data.senderId===state.uid?' mine':''));bubble.append(make('div','who',who),make('div','',data.text||''));const t=timeLabel(data.createdAt);if(t)bubble.append(make('div','when',t));list.append(bubble);}if(!docs.length)list.append(make('div','empty','No messages yet. Say hello!'));list.scrollTop=list.scrollHeight;},e=>{status('messageStatus',displayError(e),'error');$('messageList').replaceChildren(make('div','empty','Could not load conversation.'));});}
 $('messageForm').addEventListener('submit',async e=>{e.preventDefault();if(!signedInOnly()||!state.activeChat||state.sending||isBlocked(state.activePeer))return;const text=$('messageInput').value.trim(),chatId=state.activeChat;if(!text)return;state.sending=true;$('sendBtn').disabled=true;status('messageStatus','Sending…');try{await addDoc(collection(db,'conversations',chatId,'messages'),{senderId:state.uid,text,createdAt:serverTimestamp()});if(state.activeChat===chatId){$('messageInput').value='';status('messageStatus','Sent and saved in Firebase.','good');}}catch(err){status('messageStatus','Not saved: '+displayError(err),'error');}finally{state.sending=false;$('sendBtn').disabled=!state.activeChat;}});
 
 
 // Emoji buttons insert at the caret in both messages and posts. Comment input uses the same picker.
 const EMOJI_LIST=['😀','😃','😄','😁','😂','🤣','😊','😍','🥰','😘','😎','🥳','🤩','😇','🙌','👏','👍','👎','🙏','💙','❤️','💕','💯','🔥','✨','🎉','🌍','📍','📷','🍀','☀️','🌈','😢','😭','😮'];
 function insertEmojiInto(el,emoji){if(!el||el.disabled)return;const a=el.selectionStart??el.value.length,b=el.selectionEnd??a;el.value=el.value.slice(0,a)+emoji+el.value.slice(b);el.focus();const pos=a+emoji.length;el.setSelectionRange?.(pos,pos);el.dispatchEvent(new Event('input',{bubbles:true}));}
-function attachEmojiPicker(button,picker,input){for(const emoji of EMOJI_LIST){const b=make('button','',emoji);b.type='button';b.setAttribute('aria-label','Insert '+emoji);b.addEventListener('click',()=>{insertEmojiInto(input,emoji);});picker.append(b);}button.addEventListener('click',()=>{for(const p of document.querySelectorAll('.emoji-picker'))if(p!==picker)p.classList.add('hide');picker.classList.toggle('hide');});}
+function attachEmojiPicker(button,picker,input){for(const emoji of EMOJI_LIST){const b=make('button','',emoji);b.type='button';b.setAttribute('aria-label','Insert '+emoji);b.addEventListener('click',()=>{insertEmojiInto(input,emoji);picker.classList.add('hide');});picker.append(b);}button.addEventListener('click',()=>{for(const p of document.querySelectorAll('.emoji-picker'))if(p!==picker)p.classList.add('hide');picker.classList.toggle('hide');});}
 attachEmojiPicker($('postEmojiBtn'),$('postEmojiPicker'),$('postInput'));
 attachEmojiPicker($('chatEmojiBtn'),$('chatEmojiPicker'),$('messageInput'));
 document.addEventListener('click',e=>{if(!e.target.closest('.emoji-holder'))for(const p of document.querySelectorAll('.emoji-picker'))p.classList.add('hide');});
@@ -383,7 +423,150 @@ async function toggleComments(postId,wrapper,button){let panel=wrapper.querySele
 async function showComments(postId,el){try{const snap=await getDocs(query(collection(db,'posts',postId,'comments'),orderBy('createdAt','asc'),limit(50)));if(!el.isConnected)return;el.replaceChildren();if(!snap.size)el.append(make('div','small muted','No comments yet.'));snap.forEach(d=>{const x=d.data();if(!isBlocked(x.authorId))el.append(make('div','comment',nameFor(x.authorId)+': '+x.text));});}catch(e){el.textContent=displayError(e);}}
 async function removePost(postId){if(!confirm('Delete your post?'))return;try{await deleteDoc(doc(db,'posts',postId));status('postStatus','Post deleted.','good');}catch(e){status('postStatus',displayError(e),'error');}}
 
-onAuthStateChanged(auth,async user=>{const generation=++state.authGeneration;unsubscribeAll();state.uid=user?.uid||null;state.user=user||null;state.me=null;$('appLayout').classList.toggle('hide',!user);$('loginBtn').disabled=!!user;$('signupBtn').disabled=!!user;$('logoutBtn').disabled=!user;$('headerStatus').textContent=user?'● Logged In':'○ Logged Out';if(!user){status('authStatus','Sign in or create an account to continue.');return;}status('authStatus','Setting up your profile…');try{state.me=await ensureProfile(user);if(state.authGeneration!==generation)return;state.profiles.set(user.uid,state.me);state.profiles.set(DANU,state.profiles.get(DANU)||{displayName:'Danu'});state.profiles.set(ALEX,state.profiles.get(ALEX)||{displayName:'Alex'});showProfile();renderFriends();watchMyBlocks(user.uid);watchFriendships(user.uid);watchPosts(user.uid);await loadPeople();status('authStatus','Signed in as '+user.email,'good');}catch(e){status('authStatus','Signed in, but profile setup failed: '+displayError(e),'error');}});
+
+// ----- 1-to-1 WebRTC calling. Firestore stores signaling only; no audio/video recording. -----
+// STUN is useful for testing. A properly secured TURN service is needed for reliable worldwide calls.
+const CALL_ICE_SERVERS=[{urls:'stun:stun.l.google.com:19302'}];
+const callState={id:null,peer:null,kind:null,role:null,pc:null,stream:null,remoteStream:null,docUnsub:null,iceUnsub:null,iceSeen:new Set(),iceQueue:[],pendingLocal:[],created:false,timeout:null,starting:false};
+let pendingIncoming=null;
+const terminalCallStatuses=['declined','ended','cancelled','missed'];
+function callStatus(message,type=''){status('callStatus',message,type);}
+function displayCallError(e){if(e?.name==='NotAllowedError')return 'Microphone or camera permission was denied. Allow access in your browser and try again.';if(e?.name==='NotFoundError')return 'No suitable microphone or camera was found.';if(!navigator.mediaDevices?.getUserMedia)return 'Microphone and camera access requires HTTPS (or localhost) in a supported browser.';return displayError(e);}
+function setCallButtons(){const canCall=!!state.activePeer&&signedInOnly()&&!callState.id&&!callState.starting&&!isBlocked(state.activePeer);$('voiceCallBtn').disabled=!canCall;$('videoCallBtn').disabled=!canCall;}
+function hideIncomingCall(){pendingIncoming=null;$('incomingCallBanner').classList.add('hide');}
+function showIncomingCall(incoming){pendingIncoming=incoming;$('incomingCallText').textContent=(incoming.kind==='video'?'🎥 Video':'📞 Voice')+' call from '+nameFor(incoming.callerId);$('incomingCallBanner').classList.remove('hide');$('answerIncomingBtn').disabled=false;$('declineIncomingBtn').disabled=false;}
+function cleanupCall(message='Call ended.'){
+  if(callState.timeout){clearTimeout(callState.timeout);callState.timeout=null;}
+  try{callState.docUnsub?.();}catch{}; try{callState.iceUnsub?.();}catch{};
+  callState.docUnsub=null;callState.iceUnsub=null;
+  if(callState.pc){callState.pc.onicecandidate=null;callState.pc.ontrack=null;callState.pc.onconnectionstatechange=null;try{callState.pc.close();}catch{}}
+  if(callState.stream)for(const t of callState.stream.getTracks())t.stop();
+  if(callState.remoteStream)for(const t of callState.remoteStream.getTracks())t.stop();
+  for(const id of ['localCallVideo','remoteCallVideo','remoteCallAudio']){const el=$(id);el.pause();el.srcObject=null;}
+  Object.assign(callState,{id:null,peer:null,kind:null,role:null,pc:null,stream:null,remoteStream:null,created:false,starting:false,pendingLocal:[],iceQueue:[],iceSeen:new Set()});
+  $('callPanel').classList.add('hide');callStatus('');setCallButtons();
+  if(message&&signedInOnly())status('messageStatus',message);
+}
+async function endCurrentCall(optionalStatus){
+  if(!callState.id)return;
+  const ref=doc(db,'calls',callState.id),previousRole=callState.role;
+  const target=optionalStatus||(callState.pc?.remoteDescription?'ended':previousRole==='caller'?'cancelled':'ended');
+  cleanupCall(target==='ended'?'Call ended.':target==='cancelled'?'Call cancelled.':'Call finished.');
+  try{await updateDoc(ref,{status:target,updatedAt:serverTimestamp()});}
+  catch(e){console.warn('Unable to update call status:',e);status('messageStatus','Call closed locally. The other user may still see an old ringing notification.','error');}
+}
+function openCallPanel(kind,peer,phase){$('callPanel').classList.remove('hide');$('callTitle').textContent=(kind==='video'?'🎥 Video':'📞 Voice')+' call with '+nameFor(peer);$('callPhase').textContent=phase;$('callVideos').classList.toggle('voice',kind!=='video');$('cameraCallBtn').classList.toggle('hide',kind!=='video');$('muteCallBtn').textContent='🎙️ Mute';$('cameraCallBtn').textContent='📷 Camera off';callStatus(phase);$('callPanel').scrollIntoView({block:'nearest',behavior:'smooth'});setCallButtons();}
+async function prepareMedia(kind){
+  if(!window.RTCPeerConnection||!navigator.mediaDevices?.getUserMedia)throw Error('Calls require a supported browser using HTTPS (or localhost).');
+  const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true},video:kind==='video'?{facingMode:'user'}:false});
+  callState.stream=stream;
+  if(kind==='video'){$('localCallVideo').srcObject=stream;$('localCallVideo').play().catch(()=>{});}
+  const pc=new RTCPeerConnection({iceServers:CALL_ICE_SERVERS});callState.pc=pc;callState.remoteStream=new MediaStream();
+  stream.getTracks().forEach(t=>pc.addTrack(t,stream));
+  pc.ontrack=e=>{
+    if(callState.pc!==pc)return;
+    const remote=e.streams?.[0];
+    if(remote)callState.remoteStream=remote;
+    else if(!callState.remoteStream.getTracks().includes(e.track))callState.remoteStream.addTrack(e.track);
+    const player=callState.kind==='video'?$('remoteCallVideo'):$('remoteCallAudio');
+    player.srcObject=callState.remoteStream;
+    player.play().then(()=>callStatus('Connected.','good')).catch(()=>callStatus('Call connected. Click Play sound to hear your friend.'));
+  };
+  pc.onconnectionstatechange=()=>{
+    if(callState.pc!==pc)return;
+    if(pc.connectionState==='connected'){$('callPhase').textContent='Connected';callStatus('Connected.','good');}
+    else if(pc.connectionState==='failed'){callStatus('Could not connect. A TURN server may be needed on these networks.','error');}
+    else if(pc.connectionState==='disconnected'){callStatus('Connection interrupted. Waiting to reconnect…','error');}
+  };
+  pc.onicecandidate=e=>{if(!e.candidate||callState.pc!==pc)return;const item={candidate:e.candidate.candidate,sdpMid:e.candidate.sdpMid||'',sdpMLineIndex:e.candidate.sdpMLineIndex??0};if(!callState.created){callState.pendingLocal.push(item);}else publishIce(item);};
+  return pc;
+}
+async function publishIce(item){if(!callState.id||!state.uid)return;try{await addDoc(collection(db,'calls',callState.id,'candidates'),{senderId:state.uid,...item,createdAt:serverTimestamp()});}catch(e){console.warn('ICE candidate not saved:',e);}}
+function flushLocalIce(){const list=callState.pendingLocal.splice(0);list.forEach(item=>publishIce(item));}
+async function flushRemoteIce(){if(!callState.pc?.remoteDescription)return;const items=callState.iceQueue.splice(0);for(const item of items){try{await callState.pc.addIceCandidate(new RTCIceCandidate(item));}catch(e){console.warn('ICE candidate rejected:',e);}}}
+function watchCallData(){
+  const id=callState.id;if(!id)return;
+  callState.iceUnsub=onSnapshot(collection(db,'calls',id,'candidates'),snap=>{
+    if(callState.id!==id)return;
+    for(const change of snap.docChanges()){
+      if(change.type!=='added'||callState.iceSeen.has(change.doc.id))continue;
+      callState.iceSeen.add(change.doc.id);
+      const d=change.doc.data();if(d.senderId===state.uid)continue;
+      const item={candidate:d.candidate,sdpMid:d.sdpMid,sdpMLineIndex:d.sdpMLineIndex};
+      if(!callState.pc?.remoteDescription)callState.iceQueue.push(item);
+      else callState.pc.addIceCandidate(new RTCIceCandidate(item)).catch(e=>console.warn('Remote ICE error:',e));
+    }
+  },e=>callStatus('Could not exchange network connection details: '+displayError(e),'error'));
+  callState.docUnsub=onSnapshot(doc(db,'calls',id),async snap=>{
+    if(callState.id!==id)return;
+    if(!snap.exists()){cleanupCall('Call no longer available.');return;}
+    const d=snap.data();
+    if(terminalCallStatuses.includes(d.status)){cleanupCall(d.status==='declined'?'Call declined.':d.status==='missed'?'No answer.':d.status==='cancelled'?'Call cancelled.':'Call ended.');return;}
+    if(d.status==='accepted'&&callState.role==='caller'&&d.answer&&!callState.pc?.remoteDescription){
+      try{await callState.pc.setRemoteDescription(new RTCSessionDescription(d.answer));await flushRemoteIce();$('callPhase').textContent='Connecting';callStatus('Your friend answered. Connecting audio/video…');}
+      catch(e){callStatus('Unable to connect the call: '+displayCallError(e),'error');}
+    }
+  },e=>callStatus('Call signaling failed: '+displayError(e),'error'));
+}
+async function startCall(kind){
+  const peer=state.activePeer;
+  if(callState.id||callState.starting||!signedInOnly()||!peer||isBlocked(peer))return;
+  if(!isLegacyFriend(peer)&&friendshipFor(peer)?.status!=='accepted'){status('messageStatus','You must be friends before calling.','error');return;}
+  callState.starting=true;callState.kind=kind;callState.peer=peer;callState.role='caller';openCallPanel(kind,peer,'Requesting microphone/camera…');setCallButtons();
+  try{
+    const pc=await prepareMedia(kind);
+    const offer=await pc.createOffer();await pc.setLocalDescription(offer);
+    const ref=doc(collection(db,'calls'));callState.id=ref.id;
+    const participants=[state.uid,peer].sort();
+    await setDoc(ref,{callerId:state.uid,calleeId:peer,participants,kind,status:'ringing',offer:{type:pc.localDescription.type,sdp:pc.localDescription.sdp},createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    callState.created=true;callState.starting=false;flushLocalIce();watchCallData();setCallButtons();
+    $('callPhase').textContent='Ringing';callStatus('Calling '+nameFor(peer)+'… Waiting for an answer.');
+    const id=callState.id;callState.timeout=setTimeout(()=>{if(callState.id===id&&callState.pc&&!callState.pc.remoteDescription)endCurrentCall('missed');},60000);
+  }catch(e){cleanupCall('');status('messageStatus','Could not start call: '+displayCallError(e),'error');}
+}
+async function acceptIncomingCall(){
+  if(!pendingIncoming||callState.starting||callState.id)return;
+  const {id,callerId,kind}=pendingIncoming;
+  callState.starting=true;callState.role='callee';callState.kind=kind;callState.peer=callerId;callState.id=id;
+  hideIncomingCall();openCallPanel(kind,callerId,'Requesting microphone/camera…');
+  try{
+    const ref=doc(db,'calls',id),fresh=await getDoc(ref);
+    if(!fresh.exists()||fresh.data().status!=='ringing'||fresh.data().calleeId!==state.uid)throw Error('This incoming call is no longer available.');
+    const pc=await prepareMedia(kind);
+    await pc.setRemoteDescription(new RTCSessionDescription(fresh.data().offer));
+    await flushRemoteIce();
+    const answer=await pc.createAnswer();await pc.setLocalDescription(answer);
+    await updateDoc(ref,{status:'accepted',answer:{type:pc.localDescription.type,sdp:pc.localDescription.sdp},updatedAt:serverTimestamp()});
+    callState.created=true;callState.starting=false;flushLocalIce();watchCallData();
+    $('callPhase').textContent='Connecting';callStatus('Answered. Connecting to '+nameFor(callerId)+'…');setCallButtons();
+  }catch(e){cleanupCall('');status('messageStatus','Unable to answer: '+displayCallError(e),'error');}
+}
+async function declineIncomingCall(){if(!pendingIncoming)return;const {id}=pendingIncoming;hideIncomingCall();try{await updateDoc(doc(db,'calls',id),{status:'declined',updatedAt:serverTimestamp()});status('messageStatus','Call declined.');}catch(e){status('messageStatus','Could not decline call: '+displayError(e),'error');}}
+function watchIncomingCalls(uid){
+  // A simple prototype listener. For high traffic use server-side notifications and indexed active-call queries.
+  const q=query(collection(db,'calls'),where('calleeId','==',uid),limit(80));
+  const unsub=onSnapshot(q,snap=>{
+    if(state.uid!==uid)return;
+    if(callState.id||callState.starting){hideIncomingCall();return;}
+    const options=snap.docs.map(d=>({id:d.id,...d.data()})).filter(d=>{
+      const age=Date.now()-tsValue(d.createdAt);
+      return d.status==='ringing'&&d.callerId!==uid&&!isBlocked(d.callerId)&&age>=0&&age<1000*90;
+    }).sort((a,b)=>tsValue(b.createdAt)-tsValue(a.createdAt));
+    if(options.length)showIncomingCall(options[0]);else hideIncomingCall();
+  },e=>status('messageStatus','Call notifications unavailable: '+displayError(e),'error'));
+  state.unsubs.push(unsub);
+}
+$('voiceCallBtn').addEventListener('click',()=>startCall('voice'));
+$('videoCallBtn').addEventListener('click',()=>startCall('video'));
+$('answerIncomingBtn').addEventListener('click',acceptIncomingCall);
+$('declineIncomingBtn').addEventListener('click',declineIncomingCall);
+$('hangupCallBtn').addEventListener('click',()=>endCurrentCall());
+$('muteCallBtn').addEventListener('click',()=>{if(!callState.stream)return;const tracks=callState.stream.getAudioTracks();if(!tracks.length)return;const newEnabled=!tracks[0].enabled;tracks.forEach(t=>t.enabled=newEnabled);$('muteCallBtn').textContent=newEnabled?'🎙️ Mute':'🔇 Unmute';});
+$('cameraCallBtn').addEventListener('click',()=>{if(!callState.stream)return;const tracks=callState.stream.getVideoTracks();if(!tracks.length)return;const enabled=!tracks[0].enabled;tracks.forEach(t=>t.enabled=enabled);$('cameraCallBtn').textContent=enabled?'📷 Camera off':'📷 Camera on';});
+$('playCallSoundBtn').addEventListener('click',async()=>{const player=callState.kind==='video'?$('remoteCallVideo'):$('remoteCallAudio');try{await player.play();callStatus('Sound enabled.','good');}catch(e){callStatus('Could not play sound. Check browser audio permissions.','error');}});
+// ----- End calling feature -----
+
+onAuthStateChanged(auth,async user=>{const generation=++state.authGeneration;unsubscribeAll();state.uid=user?.uid||null;state.user=user||null;state.me=null;$('appLayout').classList.toggle('hide',!user);$('loginBtn').disabled=!!user;$('signupBtn').disabled=!!user;$('logoutBtn').disabled=!user;$('headerStatus').textContent=user?'● Logged In':'○ Logged Out';if(!user){status('authStatus','Sign in or create an account to continue.');return;}status('authStatus','Setting up your profile…');try{state.me=await ensureProfile(user);if(state.authGeneration!==generation)return;state.profiles.set(user.uid,state.me);state.profiles.set(DANU,state.profiles.get(DANU)||{displayName:'Danu'});state.profiles.set(ALEX,state.profiles.get(ALEX)||{displayName:'Alex'});showProfile();renderFriends();watchMyBlocks(user.uid);watchFriendships(user.uid);watchPosts(user.uid);watchIncomingCalls(user.uid);await loadPeople();status('authStatus','Signed in as '+user.email,'good');}catch(e){status('authStatus','Signed in, but profile setup failed: '+displayError(e),'error');}});
 </script>
 </body>
 </html>

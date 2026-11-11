@@ -1,0 +1,11 @@
+{
+  "id": "/my-social/",
+  "name": "My Social",
+  "short_name": "My Social",
+  "start_url": "/my-social/",
+  "scope": "/my-social/",
+  "display": "standalone",
+  "background_color": "#183c80",
+  "theme_color": "#285aba",
+  "description": "My Social private messages and calls"
+}

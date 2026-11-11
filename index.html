@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#1877f2">
+<link rel="manifest" href="./manifest.webmanifest">
 <title>My Social 💙 — Photos, Places, Sharing & Safety</title>
 <script>(function(){try{let t=localStorage.getItem('mySocialTheme');if(!['light','dark','system'].includes(t))t='system';document.documentElement.dataset.theme=t==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t;}catch{}})();</script>
 <style>
@@ -578,7 +579,17 @@ html[data-theme="dark"] #settingsDialog .ms-settings-jump button.ms-active{color
   </div>
 </div>
 <dialog id="albumDialog" class="safety-dialog" aria-labelledby="albumDialogTitle"><form id="albumForm"><h2 id="albumDialogTitle">Create photo album</h2><label class="label" for="albumName">Album name</label><input id="albumName" maxlength="60" required placeholder="e.g. Holidays"><p class="small muted">Choose photo posts to include:</p><div id="albumPhotosChoice" class="col" style="max-height:220px;overflow:auto"></div><p id="albumFormStatus" class="status"></p><div class="stack"><button type="submit" id="albumSaveBtn">Save album</button><button type="button" class="ghost" id="albumCancelBtn">Cancel</button></div></form></dialog><dialog id="editProfileDialog" class="safety-dialog" aria-labelledby="editProfileTitle"><form id="editProfileForm"><h2 id="editProfileTitle">✏️ Edit Profile</h2><label class="label" for="editName">Display name</label><input id="editName" minlength="2" maxlength="40" required><label class="label" for="editBio">Bio</label><textarea id="editBio" maxlength="240" rows="4"></textarea><p class="small muted">Your name and bio are discoverable by signed-in members.</p><p id="editProfileStatus" class="status" role="status"></p><div class="stack"><button id="saveEditProfile" type="submit">Save changes</button><button class="ghost" type="button" id="cancelEditProfile">Cancel</button></div></form></dialog>
-<dialog id="settingsDialog" class="safety-dialog" aria-labelledby="settingsTitle"><h2 id="settingsTitle">⚙️ My Social Settings</h2><nav id="msSettingsJump" class="ms-settings-jump" aria-label="Settings sections"></nav><h3>👤 Account</h3><p class="small muted">Manage your public profile and your account password.</p><div class="stack"><button id="settingsEditProfile" type="button" class="secondary">Edit profile</button><button id="settingsResetPassword" type="button" class="secondary">Reset password</button><button id="settingsVerifyEmail" type="button" class="secondary">Verify email address</button><p id="settingsVerificationStatus" class="small muted" role="status">Email verification has not been checked.</p></div><hr class="divider"><h3>🔒 Privacy</h3><p class="small muted">Profiles are discoverable to signed-in members. Posts and photos are intended for accepted friends; publish the matching Firebase rules before relying on this restriction.</p><div class="banner"><label class="label" style="display:flex;align-items:center;gap:9px"><input id="privacyFriendRequests" type="checkbox" style="width:auto" checked> Allow new friend requests</label><p class="small muted">When disabled, other accounts cannot send new requests to you. Existing friendships remain unchanged. Requires the new Firestore rules.</p><label class="label" style="display:flex;align-items:center;gap:9px"><input id="privacyOnlineStatus" type="checkbox" style="width:auto" checked> Show online status to accepted friends</label><p class="small muted">Saved for future presence support. This edition does not publish live online status.</p><p class="status" id="privacySaveStatus" role="status"></p></div><hr class="divider"><h3>👥 Friends and safety</h3><p class="small muted">Manage blocked people in your profile's Friends section. To report someone, open their three-dot menu.</p><div class="stack"><button type="button" class="secondary" id="settingsBlocked">Manage blocked accounts</button><button type="button" class="secondary" id="settingsFindPeople">Find people / Report</button></div><hr class="divider"><h3>🔔 Notifications</h3><label class="label" style="display:flex;align-items:center;gap:9px"><input id="settingsCallAlerts" type="checkbox" style="width:auto"> Enable incoming-call browser alerts</label><p class="small muted">Call alerts work while the site is open and browser permissions allow them. Closed-app push notifications are not yet supported.</p><label class="label" style="display:flex;align-items:center;gap:9px"><input id="settingsMsgAlerts" type="checkbox" style="width:auto"> Play an alert for new messages in the open conversation</label><label class="label" style="display:flex;align-items:center;gap:9px"><input id="settingsFriendAlerts" type="checkbox" style="width:auto"> Play an alert when a new friend request arrives</label><p class="small muted">These alerts work while this website is open. Notifications when the app is fully closed require future push-notification support.</p><hr class="divider"><h3>🔊 Calls &amp; sound</h3>
+<dialog id="settingsDialog" class="safety-dialog" aria-labelledby="settingsTitle"><h2 id="settingsTitle">⚙️ My Social Settings</h2><nav id="msSettingsJump" class="ms-settings-jump" aria-label="Settings sections"></nav><h3>👤 Account</h3><p class="small muted">Manage your public profile and your account password.</p><div class="stack"><button id="settingsEditProfile" type="button" class="secondary">Edit profile</button><button id="settingsResetPassword" type="button" class="secondary">Reset password</button><button id="settingsVerifyEmail" type="button" class="secondary">Verify email address</button><p id="settingsVerificationStatus" class="small muted" role="status">Email verification has not been checked.</p></div><hr class="divider"><h3>🔒 Privacy</h3><p class="small muted">Profiles are discoverable to signed-in members. Posts and photos are intended for accepted friends; publish the matching Firebase rules before relying on this restriction.</p><div class="banner"><label class="label" style="display:flex;align-items:center;gap:9px"><input id="privacyFriendRequests" type="checkbox" style="width:auto" checked> Allow new friend requests</label><p class="small muted">When disabled, other accounts cannot send new requests to you. Existing friendships remain unchanged. Requires the new Firestore rules.</p><label class="label" style="display:flex;align-items:center;gap:9px"><input id="privacyOnlineStatus" type="checkbox" style="width:auto" checked> Show online status to accepted friends</label><p class="small muted">Saved for future presence support. This edition does not publish live online status.</p><p class="status" id="privacySaveStatus" role="status"></p></div><hr class="divider"><h3>👥 Friends and safety</h3><p class="small muted">Manage blocked people in your profile's Friends section. To report someone, open their three-dot menu.</p><div class="stack"><button type="button" class="secondary" id="settingsBlocked">Manage blocked accounts</button><button type="button" class="secondary" id="settingsFindPeople">Find people / Report</button></div><hr class="divider"><h3>🔔 Notifications</h3><label class="label" style="display:flex;align-items:center;gap:9px"><input id="settingsCallAlerts" type="checkbox" style="width:auto"> Enable incoming-call browser alerts</label><p class="small muted">Call alerts work while the site is open and browser permissions allow them. Closed-app push notifications require opting in below and configuring the secure push sender.</p><label class="label" style="display:flex;align-items:center;gap:9px"><input id="settingsMsgAlerts" type="checkbox" style="width:auto"> Play an alert for new messages in the open conversation</label><label class="label" style="display:flex;align-items:center;gap:9px"><input id="settingsFriendAlerts" type="checkbox" style="width:auto"> Play an alert when a new friend request arrives</label><p class="small muted">These sounds and alerts work while My Social is open.</p>
+<div class="ms-setting-group" id="pushSettingsBox">
+<strong>📲 Background push notifications</strong>
+<p class="small muted">Receive private message and incoming-call alerts on supported devices when My Social is in the background. Requires notification permission and our secure push sender setup. Tap an incoming-call notification to reopen My Social; browser restrictions prevent guaranteed ringing or automatic answering.</p>
+<div class="stack">
+<button class="secondary" type="button" id="enableBackgroundPush">🔔 Enable on this device</button>
+<button class="ghost" type="button" id="testBackgroundPush">▶ Test device notification</button>
+<button class="ghost" type="button" id="disableBackgroundPush">Turn off on this device</button>
+</div>
+<p class="status" role="status" aria-live="polite" id="backgroundPushStatus">Background notifications not enabled on this device.</p>
+</div><hr class="divider"><h3>🔊 Calls &amp; sound</h3>
 <div class="ms-setting-group">
 <label class="inline-toggle"><input id="msIncomingSounds" type="checkbox" checked> Play an incoming-call ringtone while the site is open</label>
 <label class="inline-toggle"><input id="msOutgoingSounds" type="checkbox" checked> Play an outgoing ringing tone until the call is answered</label>
@@ -587,7 +598,7 @@ html[data-theme="dark"] #settingsDialog .ms-settings-jump button.ms-active{color
 <label for="msRingVolume">Ringtone volume</label><input id="msRingVolume" type="range" min="0" max="100" value="55" step="5">
 <div class="stack" style="margin-top:9px"><button id="msTestIncoming" type="button" class="secondary small">▶ Test incoming sound</button><button id="msTestOutgoing" type="button" class="secondary small">▶ Test outgoing sound</button><button id="msStopTestSound" type="button" class="ghost small">■ Stop</button></div>
 <p id="msSoundTestStatus" class="status" role="status" aria-live="polite">Press Test incoming sound to check your speakers.</p>
-<p class="muted">Sound works while My Social is open and the browser site is not muted. Browser autoplay restrictions can prevent ringing until you've interacted with the page. A closed app cannot ring without push notifications.</p>
+<p class="muted">Sound works while My Social is open and the browser site is not muted. Browser autoplay restrictions can prevent ringing until you've interacted with the page. A closed app needs push notifications, and background ringing is not guaranteed by browsers.</p>
 </div>
 <hr class="divider"><h3>🎨 Appearance</h3><label class="label" for="settingsTextSize">Text size</label><select id="settingsTextSize" style="width:100%;padding:10px;border-radius:9px"><option value="normal">Normal</option><option value="large">Large</option></select><label class="label" for="settingsTheme">Theme</label><select id="settingsTheme" style="width:100%;padding:10px;border-radius:9px"><option value="system">Follow device setting</option><option value="light">Light mode</option><option value="dark">Dark mode</option></select><p class="small muted">Your choice is saved in this browser.</p><div class="ms-setting-group"><label for="msWallpaper">Background style</label>
 <select id="msWallpaper"><option value="ocean">💙 Ocean blue &amp; purple</option><option value="aurora">🌿 Aurora green &amp; violet</option><option value="sunset">🌸 Sunset pink &amp; peach</option><option value="midnight">🌌 Midnight indigo</option></select>
@@ -620,6 +631,7 @@ import {initializeApp} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-
 import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail,sendEmailVerification,signOut,updateProfile} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js';
 import {getStorage,ref as storageRef,uploadBytes,getBlob} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-storage.js';
 import {getFirestore,doc,getDoc,setDoc,addDoc,updateDoc,deleteDoc,collection,query,where,orderBy,startAt,endAt,limit,getDocs,onSnapshot,serverTimestamp} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
+import {getMessaging,getToken,deleteToken,onMessage,isSupported as isMessagingSupported} from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-messaging.js';
 
 // This is the ORIGINAL My Social Firebase project. Keep this configuration.
 const firebaseConfig={apiKey:'AIzaSyDoXBu86nx1hQBYEzapMZdJm3XXckGPEs8',authDomain:'my-social-11308.firebaseapp.com',projectId:'my-social-11308',storageBucket:'my-social-11308.firebasestorage.app',messagingSenderId:'581747567782',appId:'1:581747567782:web:325dcbc4d3c791bfd01867'};
@@ -627,6 +639,92 @@ const DANU='LZGLyVFglcV24V9Qi7q28lRnkR33',ALEX='s1G5WeRtaZboEv6Xdfi5ZtsBIpw1';
 const LEGACY_CHAT=`${DANU}_${ALEX}`;
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),storage=getStorage(app);
 const $=id=>document.getElementById(id);
+
+// BACKGROUND PUSH SETUP (public config only; never store server credentials here).
+// Copy the PUBLIC Web Push VAPID key from Firebase Console -> Project settings -> Cloud Messaging.
+const MS_PUSH_PUBLIC_VAPID_KEY='BKFR3aBxE0G3CyJ_Lyzv5riQvBdHa5k1BzZYX0HM0P-81Fm1jXgFdSfg2NjyR1ob8mSSNZqb3RUzq-VGQN2GUi8'; // Public key only. Never add server credentials here.
+// After creating a trusted sender, paste its HTTPS /notify endpoint here.
+const MS_PUSH_SENDER_URL=''; // e.g. https://my-social-push.example.workers.dev/notify
+const MS_PUSH_DEVICE_KEY='mySocialPushDeviceId';
+let msPushMessaging=null,msPushOwner=null,msPushListenerAdded=false;
+function msPushStatus(message,type=''){const node=document.getElementById('backgroundPushStatus');if(node){node.textContent=message;node.className='status '+type;}}
+function msPushDeviceId(){let id='';try{id=localStorage.getItem(MS_PUSH_DEVICE_KEY)||'';if(!/^[a-zA-Z0-9-]{20,50}$/.test(id)){id=crypto.randomUUID();localStorage.setItem(MS_PUSH_DEVICE_KEY,id);}}catch{id=crypto.randomUUID();}return id;}
+async function msPushRegistration(){
+ if(!window.isSecureContext||!('serviceWorker' in navigator)||!('Notification' in window))throw Error('Background notifications require HTTPS and a supported browser.');
+ return navigator.serviceWorker.register('./firebase-messaging-sw.js',{scope:'./'});
+}
+async function msPushMessagingReady(){
+ if(!await isMessagingSupported())throw Error('This browser does not support Firebase background notifications.');
+ if(!msPushMessaging)msPushMessaging=getMessaging(app);
+ if(!msPushListenerAdded){
+  onMessage(msPushMessaging,payload=>{
+   if(document.visibilityState==='visible'){
+    const kind=payload?.data?.kind;
+    if(kind==='message' && typeof msToast==='function')msToast('💬 You received a private message.');
+    // Incoming calls are already handled by the live Firestore listener while the app is open.
+   }
+  });msPushListenerAdded=true;
+ }
+ return msPushMessaging;
+}
+async function msPushEnable(skipPrompt=false){
+ const current=auth.currentUser;if(!current)throw Error('Sign in before enabling notifications.');
+ if(!MS_PUSH_PUBLIC_VAPID_KEY||MS_PUSH_PUBLIC_VAPID_KEY.length<45)throw Error('The owner must add the PUBLIC Firebase Web Push key to index.html first.');
+ if(skipPrompt && Notification.permission!=='granted')return;
+ // Request permission while the Enable button is being handled (user gesture).
+ const permission=skipPrompt?Notification.permission:await Notification.requestPermission();
+ if(permission!=='granted')throw Error('Notifications are blocked. Allow them in your browser settings to continue.');
+ msPushStatus('Registering this device…');
+ const sw=await msPushRegistration();
+ const messaging=await msPushMessagingReady();
+ const token=await getToken(messaging,{vapidKey:MS_PUSH_PUBLIC_VAPID_KEY,serviceWorkerRegistration:sw});
+ if(!token)throw Error('No push registration token was returned by Firebase.');
+ if(auth.currentUser?.uid!==current.uid)throw Error('Your account changed. Please enable notifications again.');
+ const deviceId=msPushDeviceId();
+ await setDoc(doc(db,'pushSubscriptions',current.uid,'devices',deviceId),{token,enabled:true,updatedAt:serverTimestamp()});
+ msPushOwner=current.uid;
+ try{localStorage.setItem('mySocialPushEnabled_'+current.uid,'yes');}catch{}
+ msPushStatus(MS_PUSH_SENDER_URL?'This device is registered for message and call push alerts.':'This device is registered. A secure push sender still needs to be connected for real background alerts.','good');
+}
+async function msPushDisable(silent=false){
+ const uid=msPushOwner||auth.currentUser?.uid;
+ if(uid){
+  try{await deleteDoc(doc(db,'pushSubscriptions',uid,'devices',msPushDeviceId()));}
+  catch(e){if(!silent)throw e;console.warn('Could not remove device push token:',e);}
+  try{localStorage.removeItem('mySocialPushEnabled_'+uid);}catch{}
+ }
+ if(msPushMessaging){try{await deleteToken(msPushMessaging);}catch(e){console.warn('Could not unsubscribe push:',e);}}
+ msPushOwner=null;
+ if(!silent)msPushStatus('Background notifications disabled on this device.');
+}
+async function msPushTrigger(kind,eventId,recipientId){
+ // Sending must be authenticated and performed by a trusted server; never send FCM using secrets in the browser.
+ if(!MS_PUSH_SENDER_URL||!auth.currentUser||!eventId||!recipientId)return;
+ try{
+  const user=auth.currentUser;
+  const bearer=await user.getIdToken();
+  if(!MS_PUSH_SENDER_URL.startsWith('https://'))return;
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),7000);
+  try{await fetch(MS_PUSH_SENDER_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+bearer},body:JSON.stringify({kind,eventId,recipientId}),signal:controller.signal});}
+  finally{clearTimeout(timer);}
+ }catch(e){console.warn('Background push request unavailable; message/call itself is saved:',e);}
+}
+$('enableBackgroundPush').addEventListener('click',()=>msPushEnable().catch(e=>msPushStatus('Could not enable: '+(e.message||e),'error')));
+$('disableBackgroundPush').addEventListener('click',()=>msPushDisable().catch(e=>msPushStatus('Could not disable: '+(e.message||e),'error')));
+$('testBackgroundPush').addEventListener('click',async()=>{
+ try{
+  if(Notification.permission!=='granted')throw Error('First tap Enable on this device.');
+  const sw=await msPushRegistration();
+  await sw.showNotification('My Social 💙',{body:'Test notification on this device. This is not a real incoming message.',tag:'my-social-test',data:{url:new URL('./',location.href).href}});
+  msPushStatus('Test notification requested. Real remote push still requires the secure sender.','good');
+ }catch(e){msPushStatus('Test failed: '+(e.message||e),'error');}
+});
+$('openSettingsBtn').addEventListener('click',()=>{
+ const uid=auth.currentUser?.uid;let enabled=false;
+ try{enabled=!!uid&&localStorage.getItem('mySocialPushEnabled_'+uid)==='yes';}catch{}
+ msPushStatus(enabled?'Push enabled on this device (subject to browser permission and secure sender).':'Background notifications not enabled on this device.');
+});
+
 const state={uid:null,user:null,me:null,profiles:new Map(),friendships:new Map(),blocks:new Map(),reportTargetUid:null,activeChat:null,activePeer:null,unsubs:[],chatUnsub:null,postUnsub:null,postsByAuthor:new Map(),feedScope:'',profileViewUid:null,extraProfileUid:null,extraProfileUnsub:null,peopleTimer:null,authGeneration:0,posting:false,sending:false};
 let pendingSignupName='';
 const str=s=>String(s??'');
@@ -703,7 +801,7 @@ $('forgotPasswordBtn').addEventListener('click', async () => {
 });
 $('loginBtn').addEventListener('click',()=>authAction('login'));
 $('signupBtn').addEventListener('click',()=>authAction('signup'));
-$('logoutBtn').addEventListener('click',async()=>{try{if(callState.id)await endCurrentCall();await signOut(auth);status('authStatus','Logged out.','good');}catch(e){status('authStatus',displayError(e),'error');}});
+$('logoutBtn').addEventListener('click',async()=>{try{if(callState.id)await endCurrentCall();try{await msPushDisable(true);}catch(e){console.warn('Push cleanup unavailable:',e);}await signOut(auth);status('authStatus','Logged out.','good');}catch(e){status('authStatus',displayError(e),'error');}});
 $('profileLogoutBtn').addEventListener('click',()=>$('logoutBtn').click());
 // Three full screens, without reloading Firebase or interrupting an ongoing call.
 let currentView='feed';
@@ -1340,12 +1438,14 @@ $('messageForm').addEventListener('submit',async e=>{e.preventDefault();if(!sign
  const sendText=attachment&&pendingReply?.chatId===chatId?fallbackReplyText(text||'📎 Attachment'):text;
  const replyFields=!attachment&&pendingReply?.chatId===chatId?{replyToId:pendingReply.id}:{};
 try{
- await addDoc(collection(db,'conversations',chatId,'messages'),{senderId:state.uid,text:sendText,createdAt:serverTimestamp(),...mediaFields,...replyFields});
+ const sentMessage=await addDoc(collection(db,'conversations',chatId,'messages'),{senderId:state.uid,text:sendText,createdAt:serverTimestamp(),...mediaFields,...replyFields});
+ msPushTrigger('message',sentMessage.id,state.activePeer);
 }catch(sendError){
  // Only retry plain-text replies denied for the optional replyToId field.
  // Chat membership and blocking checks are still enforced by Firebase.
  if(sendError?.code!=='permission-denied'||!replyFields.replyToId||attachment)throw sendError;
- await addDoc(collection(db,'conversations',chatId,'messages'),{senderId:state.uid,text:fallbackReplyText(text),createdAt:serverTimestamp()});
+ const sentMessage=await addDoc(collection(db,'conversations',chatId,'messages'),{senderId:state.uid,text:fallbackReplyText(text),createdAt:serverTimestamp()});
+ msPushTrigger('message',sentMessage.id,state.activePeer);
 }
 if(state.activeChat===chatId){$('messageInput').value='';cancelMessageReply();resetMedia();publishChatStatus({typing:false,typingUpdatedAt:serverTimestamp()});status('messageStatus','Sent and saved in Firebase.','good');}}catch(err){const code=err?.code||'';const hint=attachment&&code==='permission-denied'?' Your live Firestore chat rules must allow this image or audio mediaType and mediaData for approved friends.':code.startsWith('storage/')?' Cloud Storage is not available on Spark.':'';status('messageStatus','Not saved: '+displayError(err)+hint,'error');}finally{state.sending=false;$('sendBtn').disabled=!state.activeChat;}});
 
@@ -1916,6 +2016,7 @@ async function startCall(kind){
     const participants=[state.uid,peer].sort();
     await setDoc(ref,{callerId:state.uid,calleeId:peer,participants,kind,status:'ringing',offer:{type:pc.localDescription.type,sdp:pc.localDescription.sdp},createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
     callState.created=true;callState.starting=false;flushLocalIce();watchCallData();setCallButtons();
+    msPushTrigger('call',ref.id,peer);
     $('callPhase').textContent='Ringing';callStatus('Calling '+nameFor(peer)+'… Waiting for an answer.');msStartRingtone('outgoing');
     const id=callState.id;callState.timeout=setTimeout(()=>{if(callState.id===id&&callState.pc&&!callState.pc.remoteDescription)endCurrentCall('missed');},60000);
   }catch(e){cleanupCall('');status('messageStatus','Could not start call: '+displayCallError(e),'error');}
@@ -1964,7 +2065,7 @@ $('cameraCallBtn').addEventListener('click',()=>{if(!callState.stream)return;con
 $('playCallSoundBtn').addEventListener('click',async()=>{msAudio();try{msAudioMuted=false;$('remoteCallAudio').muted=false;$('msSpeakerMute').textContent='🔊 Speaker on';msSetSpeakerVolume();await $('remoteCallAudio').play();if(callState.kind==='video')$('remoteCallVideo').play().catch(()=>{});callStatus('Speaker enabled. If you still hear nothing, check that the call connected.','good');}catch(e){callStatus('Could not play sound. Check browser audio permissions.','error');}});
 // ----- End calling feature -----
 
-onAuthStateChanged(auth,async user=>{const generation=++state.authGeneration;unsubscribeAll();state.uid=user?.uid||null;state.user=user||null;state.me=null;$('appLayout').classList.toggle('hide',!user);$('authCard').classList.toggle('hide',!!user);$('profileLogoutBtn').disabled=!user;updateCallAlertsStatus();if(user)showPage(currentView,false);$('loginBtn').disabled=!!user;$('signupBtn').disabled=!!user;$('logoutBtn').disabled=!user;$('headerStatus').textContent=user?'● Logged In':'○ Logged Out';if(!user){status('authStatus','Sign in or create an account to continue.');return;}status('authStatus','Setting up your profile…');try{state.me=await ensureProfile(user);if(state.authGeneration!==generation)return;state.profiles.set(user.uid,state.me);state.profiles.set(DANU,state.profiles.get(DANU)||{displayName:'Danu'});state.profiles.set(ALEX,state.profiles.get(ALEX)||{displayName:'Alex'});showProfile();state.profileViewUid=user.uid;renderFriends();watchSharedProfiles(user.uid);watchMyBlocks(user.uid);watchFriendships(user.uid);watchPosts(user.uid);watchIncomingCalls(user.uid);await loadPeople();status('authStatus','Signed in as '+user.email,'good');}catch(e){status('authStatus','Signed in, but profile setup failed: '+displayError(e),'error');}});
+onAuthStateChanged(auth,async user=>{const generation=++state.authGeneration;unsubscribeAll();state.uid=user?.uid||null;state.user=user||null;state.me=null;$('appLayout').classList.toggle('hide',!user);$('authCard').classList.toggle('hide',!!user);$('profileLogoutBtn').disabled=!user;updateCallAlertsStatus();if(user)showPage(currentView,false);$('loginBtn').disabled=!!user;$('signupBtn').disabled=!!user;$('logoutBtn').disabled=!user;$('headerStatus').textContent=user?'● Logged In':'○ Logged Out';if(!user){status('authStatus','Sign in or create an account to continue.');return;}status('authStatus','Setting up your profile…');try{state.me=await ensureProfile(user);if(state.authGeneration!==generation)return;state.profiles.set(user.uid,state.me);state.profiles.set(DANU,state.profiles.get(DANU)||{displayName:'Danu'});state.profiles.set(ALEX,state.profiles.get(ALEX)||{displayName:'Alex'});showProfile();state.profileViewUid=user.uid;renderFriends();watchSharedProfiles(user.uid);watchMyBlocks(user.uid);watchFriendships(user.uid);watchPosts(user.uid);watchIncomingCalls(user.uid);await loadPeople();try{if(localStorage.getItem('mySocialPushEnabled_'+user.uid)==='yes'&&Notification.permission==='granted')msPushEnable(true).catch(e=>console.warn('Push restore:',e));}catch{}status('authStatus','Signed in as '+user.email,'good');}catch(e){status('authStatus','Signed in, but profile setup failed: '+displayError(e),'error');}});
 </script>
 </body>
 </html>

@@ -344,7 +344,7 @@ button:active:not(:disabled){transform:scale(.985)}
 .ms-call-extras input{accent-color:var(--ms-accent)}
 .ms-call-extras button{flex:0 0 auto}
 .ms-call-notice{color:var(--muted);font-size:12px;margin-top:8px}
-.ms-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:1500;background:#1c3254;color:#fff;padding:13px 20px;border-radius:13px;box-shadow:0 10px 30px #13203855;max-width:min(92vw,450px);text-align:center;}font-size:14px}
+.ms-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:1500;background:#1c3254;color:#fff;padding:13px 20px;border-radius:13px;box-shadow:0 10px 30px #13203855;max-width:min(92vw,450px);text-align:center;font-size:14px}
 [data-motion="off"] *,[data-motion="off"] *::before,[data-motion="off"] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 @media (max-width:740px){#settingsDialog{padding:18px 15px;width:96vw} .ms-settings-jump{top:-18px} .ms-call-extras{flex-direction:column;align-items:stretch} .ms-toast{bottom:100px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
@@ -644,7 +644,9 @@ const $=id=>document.getElementById(id);
 // Copy the PUBLIC Web Push VAPID key from Firebase Console -> Project settings -> Cloud Messaging.
 const MS_PUSH_PUBLIC_VAPID_KEY='BKFR3aBxE0G3CyJ_Lyzv5riQvBdHa5k1BzZYX0HM0P-81Fm1jXgFdSfg2NjyR1ob8mSSNZqb3RUzq-VGQN2GUi8'; // Public key only. Never add server credentials here.
 // After creating a trusted sender, paste its HTTPS /notify endpoint here.
-const MS_PUSH_SENDER_URL=''; // e.g. https://my-social-push.example.workers.dev/notify
+
+const MS_PUSH_SENDER_URL='https://my-social-notifications.danuradu20.workers.dev/notify';
+
 const MS_PUSH_DEVICE_KEY='mySocialPushDeviceId';
 let msPushMessaging=null,msPushOwner=null,msPushListenerAdded=false;
 function msPushStatus(message,type=''){const node=document.getElementById('backgroundPushStatus');if(node){node.textContent=message;node.className='status '+type;}}
@@ -681,7 +683,17 @@ async function msPushEnable(skipPrompt=false){
  if(!token)throw Error('No push registration token was returned by Firebase.');
  if(auth.currentUser?.uid!==current.uid)throw Error('Your account changed. Please enable notifications again.');
  const deviceId=msPushDeviceId();
- await setDoc(doc(db,'pushSubscriptions',current.uid,'devices',deviceId),{token,enabled:true,updatedAt:serverTimestamp()});
+ 
+const response = await fetch(MS_PUSH_SENDER_URL.replace(/\/notify\/?$/, '/register'), {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + await current.getIdToken()
+  },
+  body: JSON.stringify({ deviceId, token })
+});
+if (!response.ok) throw Error('Device registration failed: HTTP ' + response.status);
+
  msPushOwner=current.uid;
  try{localStorage.setItem('mySocialPushEnabled_'+current.uid,'yes');}catch{}
  msPushStatus(MS_PUSH_SENDER_URL?'This device is registered for message and call push alerts.':'This device is registered. A secure push sender still needs to be connected for real background alerts.','good');
@@ -689,7 +701,28 @@ async function msPushEnable(skipPrompt=false){
 async function msPushDisable(silent=false){
  const uid=msPushOwner||auth.currentUser?.uid;
  if(uid){
-  try{await deleteDoc(doc(db,'pushSubscriptions',uid,'devices',msPushDeviceId()));}
+  
+try {
+  const user = auth.currentUser;
+  if (!user || user.uid !== uid) {
+    throw Error('Sign in before disabling notifications.');
+  }
+  const response = await fetch(
+    MS_PUSH_SENDER_URL.replace(/\/notify\/?$/, '/unregister'),
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + await user.getIdToken()
+      },
+      body: JSON.stringify({ deviceId: msPushDeviceId() })
+    }
+  );
+  if (!response.ok) {
+    throw Error('Could not unregister device: HTTP ' + response.status);
+  }
+}
+
   catch(e){if(!silent)throw e;console.warn('Could not remove device push token:',e);}
   try{localStorage.removeItem('mySocialPushEnabled_'+uid);}catch{}
  }
@@ -2067,5 +2100,226 @@ $('playCallSoundBtn').addEventListener('click',async()=>{msAudio();try{msAudioMu
 
 onAuthStateChanged(auth,async user=>{const generation=++state.authGeneration;unsubscribeAll();state.uid=user?.uid||null;state.user=user||null;state.me=null;$('appLayout').classList.toggle('hide',!user);$('authCard').classList.toggle('hide',!!user);$('profileLogoutBtn').disabled=!user;updateCallAlertsStatus();if(user)showPage(currentView,false);$('loginBtn').disabled=!!user;$('signupBtn').disabled=!!user;$('logoutBtn').disabled=!user;$('headerStatus').textContent=user?'● Logged In':'○ Logged Out';if(!user){status('authStatus','Sign in or create an account to continue.');return;}status('authStatus','Setting up your profile…');try{state.me=await ensureProfile(user);if(state.authGeneration!==generation)return;state.profiles.set(user.uid,state.me);state.profiles.set(DANU,state.profiles.get(DANU)||{displayName:'Danu'});state.profiles.set(ALEX,state.profiles.get(ALEX)||{displayName:'Alex'});showProfile();state.profileViewUid=user.uid;renderFriends();watchSharedProfiles(user.uid);watchMyBlocks(user.uid);watchFriendships(user.uid);watchPosts(user.uid);watchIncomingCalls(user.uid);await loadPeople();try{if(localStorage.getItem('mySocialPushEnabled_'+user.uid)==='yes'&&Notification.permission==='granted')msPushEnable(true).catch(e=>console.warn('Push restore:',e));}catch{}status('authStatus','Signed in as '+user.email,'good');}catch(e){status('authStatus','Signed in, but profile setup failed: '+displayError(e),'error');}});
 </script>
+<!-- My Social Update 6: cover-photo repositioning add-on.
+     Paste this complete block after the existing script and before the body closes.
+     It reuses the existing #coverFile upload and Firebase coverData saving code. -->
+<script>
+(() => {
+  'use strict';
+  const input = document.getElementById('coverFile');
+  if (!input || input.dataset.repositionInstalled === 'yes') return;
+  input.dataset.repositionInstalled = 'yes';
+
+  const style = document.createElement('style');
+  style.textContent = `
+    .ms-cover-backdrop{position:fixed;inset:0;z-index:2147483645;
+      background:rgba(7,14,29,.86);display:flex;align-items:center;
+      justify-content:center;padding:16px;box-sizing:border-box}
+    .ms-cover-panel{width:min(760px,100%);max-height:95vh;overflow:auto;
+      background:#172337;color:#fff;border:1px solid #506489;
+      border-radius:18px;padding:18px;box-sizing:border-box;
+      box-shadow:0 18px 55px #0009;font:inherit}
+    .ms-cover-panel h2{color:#fff;margin:0 0 8px;font-size:22px}
+    .ms-cover-panel p{color:#cfd8e9;margin:0 0 14px;font-size:14px}
+    .ms-cover-window{position:relative;width:100%;aspect-ratio:3/1;overflow:hidden;
+      border-radius:12px;background:#24344b;touch-action:none;cursor:grab;
+      border:2px solid #7992be;box-sizing:border-box;user-select:none}
+    .ms-cover-window:active{cursor:grabbing}
+    .ms-cover-window::before{content:"";position:absolute;inset:-25px;
+      background-image:var(--ms-cover-photo);background-size:cover;
+      background-position:center;filter:blur(18px) brightness(.65);
+      pointer-events:none}
+    .ms-cover-window img{position:absolute;z-index:1;max-width:none;pointer-events:none;
+      user-select:none;-webkit-user-drag:none}
+    .ms-cover-actions{display:flex;gap:10px;justify-content:flex-end;
+      align-items:center;flex-wrap:wrap;margin-top:16px}
+    .ms-cover-actions button{border:0;border-radius:9px;padding:10px 16px;
+      font:inherit;font-weight:700;cursor:pointer}
+    .ms-cover-cancel{background:#dce4f3;color:#172337}
+    .ms-cover-save{background:#3986ff;color:white}
+    .ms-cover-zoom{display:flex;align-items:center;gap:8px;margin-top:12px}
+    .ms-cover-zoom label{color:#cfd8e9;font-size:14px}
+    .ms-cover-zoom input{flex:1;accent-color:#3986ff}
+  `;
+  document.head.appendChild(style);
+
+  let allowExistingUpload = false;
+  input.addEventListener('change', function(e) {
+    if (allowExistingUpload) return;
+    const file = input.files && input.files[0];
+    if (!file) return;
+    // Stop the existing upload until the owner has approved their crop.
+    e.stopImmediatePropagation();
+    input.value = '';
+    if (!file.type.startsWith('image/')) {
+      alert('Please choose an image for the cover.');
+      return;
+    }
+    if (file.size > 12 * 1024 * 1024) {
+      alert('Please choose a photo smaller than 12 MB.');
+      return;
+    }
+    openReposition(file);
+  }, true);
+
+  async function openReposition(file) {
+    const url = URL.createObjectURL(file);
+    const photo = new Image();
+    try {
+      photo.src = url;
+      await photo.decode();
+    } catch (err) {
+      URL.revokeObjectURL(url);
+      alert('Could not open this photo. Please choose another image.');
+      return;
+    }
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'ms-cover-backdrop';
+    backdrop.innerHTML = `
+      <div class="ms-cover-panel" role="dialog" aria-modal="true"
+           aria-label="Reposition your cover photo">
+        <h2>Reposition cover photo</h2>
+        <p>Drag the image up, down, or sideways. Only the visible area will be saved.</p>
+        <div class="ms-cover-window" aria-label="Cover photo crop preview"></div>
+        <div class="ms-cover-zoom">
+          <label for="ms-cover-zoom-range">Zoom</label>
+          <input id="ms-cover-zoom-range" type="range" min="0.6" max="2.5"
+                 step="0.01" value="0.85">
+        </div>
+        <div class="ms-cover-actions">
+          <button type="button" class="ms-cover-cancel">Cancel</button>
+          <button type="button" class="ms-cover-save">Save cover</button>
+        </div>
+      </div>`;
+    document.body.appendChild(backdrop);
+    const frame = backdrop.querySelector('.ms-cover-window');
+    // The softened backdrop fills the uncovered area when zoomed out.
+    frame.style.setProperty('--ms-cover-photo', `url("${url}")`);
+    const zoomInput = backdrop.querySelector('#ms-cover-zoom-range');
+    const saveButton = backdrop.querySelector('.ms-cover-save');
+    const cancelButton = backdrop.querySelector('.ms-cover-cancel');
+    const image = document.createElement('img');
+    image.src = url;
+    image.alt = 'Cover photo preview';
+    frame.appendChild(image);
+
+    let zoom = 0.85, x = 0, y = 0, drawnW = 0, drawnH = 0, active = false;
+    let startX = 0, startY = 0, originalX = 0, originalY = 0;
+    let closed = false;
+
+    function frameSize() {
+      return { w: frame.clientWidth, h: frame.clientHeight };
+    }
+    function clamp() {
+      const {w,h} = frameSize();
+      // When zoomed out, let the owner slide the smaller image anywhere
+      // within the visible cover. The background still fills the frame.
+      x = Math.max(Math.min(0,w-drawnW), Math.min(Math.max(0,w-drawnW), x));
+      y = Math.max(Math.min(0,h-drawnH), Math.min(Math.max(0,h-drawnH), y));
+    }
+    function draw(reset = false) {
+      const {w,h} = frameSize();
+      if (!w || !h) return;
+      const scale = Math.max(w / photo.naturalWidth, h / photo.naturalHeight) * zoom;
+      const oldW = drawnW, oldH = drawnH;
+      drawnW = photo.naturalWidth * scale;
+      drawnH = photo.naturalHeight * scale;
+      if (reset || !oldW || !oldH) {
+        x = (w - drawnW) / 2;
+        y = (h - drawnH) / 2;
+      } else {
+        // Keep the currently visible centre in place while zooming.
+        x = w / 2 - (w / 2 - x) * drawnW / oldW;
+        y = h / 2 - (h / 2 - y) * drawnH / oldH;
+      }
+      clamp();
+      image.style.width = drawnW + 'px';
+      image.style.height = drawnH + 'px';
+      image.style.left = x + 'px';
+      image.style.top = y + 'px';
+    }
+    function position() {
+      clamp();
+      image.style.left = x + 'px';
+      image.style.top = y + 'px';
+    }
+    draw(true);
+    zoomInput.addEventListener('input', () => {
+      zoom = Number(zoomInput.value) || 1;
+      draw();
+    });
+    frame.addEventListener('pointerdown', e => {
+      active = true;
+      startX = e.clientX; startY = e.clientY;
+      originalX = x; originalY = y;
+      frame.setPointerCapture(e.pointerId);
+    });
+    frame.addEventListener('pointermove', e => {
+      if (!active) return;
+      x = originalX + e.clientX - startX;
+      y = originalY + e.clientY - startY;
+      position();
+    });
+    frame.addEventListener('pointerup', () => { active = false; });
+    frame.addEventListener('pointercancel', () => { active = false; });
+
+    function close() {
+      if (closed) return;
+      closed = true;
+      backdrop.remove();
+      URL.revokeObjectURL(url);
+    }
+    cancelButton.addEventListener('click', close);
+    backdrop.addEventListener('click', e => {
+      if (e.target === backdrop) close();
+    });
+
+    saveButton.addEventListener('click', async () => {
+      saveButton.disabled = true;
+      saveButton.textContent = 'Preparing…';
+      try {
+        const {w,h} = frameSize();
+        if (!w || !h || !drawnW || !drawnH) throw Error('Invalid preview size.');
+        const canvas = document.createElement('canvas');
+        canvas.width = 900;
+        canvas.height = 300;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw Error('Canvas is unavailable.');
+        // Paint a softened fill, matching the preview's empty-area treatment.
+        const bgScale = Math.max(canvas.width / photo.naturalWidth,
+                                 canvas.height / photo.naturalHeight) * 1.25;
+        const bgW = photo.naturalWidth * bgScale;
+        const bgH = photo.naturalHeight * bgScale;
+        ctx.fillStyle = '#24344b';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.filter = 'blur(24px) brightness(0.65)';
+        ctx.drawImage(photo,(canvas.width-bgW)/2,(canvas.height-bgH)/2,bgW,bgH);
+        ctx.filter = 'none';
+        // Then draw the foreground image exactly where the preview shows it.
+        ctx.drawImage(photo, x/w*canvas.width, y/h*canvas.height,
+          drawnW/w*canvas.width, drawnH/h*canvas.height);
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+        if (!blob) throw Error('Could not prepare the photo.');
+        const prepared = new File([blob], 'repositioned-cover.jpg', {type:'image/jpeg'});
+        const transfer = new DataTransfer();
+        transfer.items.add(prepared);
+        input.files = transfer.files;
+        close();
+        // Hand the crop to My Social's ORIGINAL save handler, which stores coverData.
+        allowExistingUpload = true;
+        try { input.dispatchEvent(new Event('change', {bubbles:true})); }
+        finally { allowExistingUpload = false; }
+      } catch (err) {
+        alert('Cover not prepared: ' + (err.message || err));
+        saveButton.disabled = false;
+        saveButton.textContent = 'Save cover';
+      }
+    });
+  }
+})();
+
+</script>
+
 </body>
 </html>

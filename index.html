@@ -4373,6 +4373,19 @@ async function loadStories(){const uid=state.uid,run=++storyRun;storyRow.replace
 storyFile.addEventListener('change',async()=>{const file=storyFile.files[0],uid=state.uid;storyFile.value='';if(!file||!uid)return;storyAdd.disabled=true;try{storyStatus.textContent='Preparing story…';const imageData=await compressPhoto(file);if(state.uid!==uid)return;await setDoc(doc(db,'photoStories',uid),{imageData,createdAt:serverTimestamp()});await loadStories();}catch(e){storyStatus.textContent=displayError(e);}finally{storyAdd.disabled=false;}});
 onAuthStateChanged(auth,()=>{storyRun++;clearTimeout(storyTimer);if(storyDialog.open)storyDialog.close();storyRow.replaceChildren();});
 
+
+// V11: opt-in interaction, bounded manual reads, one vote per UTC day.
+const dailyPanel=make('section','card'), dailyStatus=make('p','small muted'), dailyChoices=make('div'), dailyTitle=make('h3');
+const dailyQuestions=[['Which city would you visit?','Dubai','London','Dublin','Rome'],['What do you enjoy most?','Music','Travel','Gaming','Sports'],['What would you like to learn?','Languages','Technology','Cooking','Art']];
+let dailyRun=0;
+function dailyDay(){return new Date().toISOString().slice(0,10)}
+async function dailyLoad(){const uid=state.uid,run=++dailyRun,day=dailyDay();dailyChoices.replaceChildren();if(!uid)return;const q=dailyQuestions[Math.floor(Date.parse(day)/86400000)%dailyQuestions.length];dailyTitle.textContent=q[0];dailyStatus.textContent='Loading…';try{const ref=doc(db,'dailyPolls',day,'votes',uid), snap=await getDoc(ref);if(run!==dailyRun||uid!==state.uid)return;dailyStatus.textContent=snap.exists()?'Your vote: '+q[snap.data().choice+1]:'Choose one answer. New question daily (UTC).';q.slice(1).forEach((label,i)=>{const b=v7Button(label,async()=>{if(uid!==state.uid||day!==dailyDay())return dailyLoad();for(const x of dailyChoices.children)x.disabled=true;try{await setDoc(ref,{choice:i,createdAt:serverTimestamp()});await dailyLoad();}catch(e){dailyStatus.textContent=displayError(e);for(const x of dailyChoices.children)x.disabled=false;}});b.disabled=snap.exists();dailyChoices.append(b);});}catch(e){dailyStatus.textContent=displayError(e);}}
+dailyPanel.append(make('h2','','🌍 Daily worldwide question'),dailyTitle,dailyChoices,v7Button('Load today’s question',dailyLoad),dailyStatus);dailyChoices.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin:10px 0';$('feed').before(dailyPanel);
+const discoverPanel=make('section','card'),discoverList=make('div'),discoverStatus=make('p','small muted');let discoverRun=0;
+async function discoverLoad(){const uid=state.uid,run=++discoverRun;if(!uid)return;discoverList.replaceChildren();discoverStatus.textContent='Loading…';try{const results=await getDocs(query(collection(db,'users'),orderBy('searchName'),limit(30)));if(run!==discoverRun||uid!==state.uid)return;for(const d of results.docs){if(d.id===uid||isBlocked(d.id)||approvedFriend(d.id))continue;state.profiles.set(d.id,d.data());discoverList.append(personRow(d.id,d.data()));}discoverStatus.textContent=discoverList.children.length?'Showing suggestions from up to 30 profiles.':'No new suggestions in this batch.';}catch(e){discoverStatus.textContent=displayError(e);}}
+discoverPanel.append(make('h2','','👥 Discover people'),make('p','small muted','Find members and send friend requests. No location sharing required.'),v7Button('Discover members',discoverLoad),discoverList,discoverStatus);$('feed').before(discoverPanel);
+onAuthStateChanged(auth,()=>{dailyRun++;discoverRun++;dailyChoices.replaceChildren();discoverList.replaceChildren();dailyTitle.textContent='';dailyStatus.textContent='';discoverStatus.textContent='';});
+
 </script>
 <!-- My Social Update 6: cover-photo repositioning add-on.
      Paste this complete block after the existing script and before the body closes.
